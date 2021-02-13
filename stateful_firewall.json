@@ -1,0 +1,52 @@
+{
+    "fields": ["pt"],
+    "in_packets": [
+        "(pt = 1)", "(pt = 2)"
+    ], 
+    "out_packets": [
+        "(pt = 2)", "(pt = 1)"
+    ], 
+    "pi_unfolding": 2, 
+    "recursive_variables": {
+        "Switch": "(pt = 1 . pt <- 2) ; Switch o+ (pt = 2 . zero) ; Switch o+ (secConReq ? one) ; Switch'",
+        "Switch'": "(pt = 1 . pt <- 2) ; Switch' o+ (pt = 2 . pt <- 1) ; Switch' o+ (secConEnd ? one) ; Switch",
+        "Host": "(secConReq ! one) ; Host o+ (secConEnd ! one) ; Host"
+    }, 
+    "channels": {
+        "Switch": "secConReq",
+        "Switch'": "secConEnd"
+    }, 
+    "program": "Host || Switch", 
+    "flow_tables": {
+        "Host": [], 
+        "Switch": [
+            "one"
+        ], 
+        "Switch'": [
+            "one"
+        ]
+    }, 
+    "module_name": "STATEFUL-FIREWALL", 
+    "properties": {
+        "0": [
+            [
+                "head(@Program)", 
+                "!0"
+            ],
+            [
+                "(head(tail(@Program, {rcfg(secConReq, one)})))", 
+                "!0"
+            ]
+        ],
+        "1": [
+            [
+                "head(@Program)", 
+                "=0"
+            ],
+            [
+                "(head(tail(@Program, {rcfg(secConReq, one)})))", 
+                "!0"
+            ]
+        ]
+    }
+}

@@ -1,0 +1,82 @@
+fmod FIELD is
+	sort Field .
+endfm
+
+fmod PREDICATE is	
+	protecting FIELD .
+	protecting NAT .
+	sort Predicate .
+
+	op one : -> Predicate [ctor] .
+	op zero : -> Predicate [ctor] .	
+
+	op _=_ : Field Nat -> Predicate [ctor metadata "test" prec 39] .
+	op ~_ : Predicate -> Predicate [ctor metadata "negation" prec 38] .
+	op _+_ : Predicate Predicate -> Predicate [ctor comm assoc metadata "disjunction" prec 43] .
+	op _._ : Predicate Predicate -> Predicate [ctor assoc metadata "conjunction" prec 40] .
+endfm
+
+fmod NETKAT is
+    protecting PREDICATE .
+	protecting FIELD .
+	protecting NAT .
+
+	sort NPolicy .
+	subsort Predicate < NPolicy .
+
+	op _+_ : NPolicy NPolicy -> NPolicy [ctor comm assoc metadata "nondeterministic choice" prec 43] .
+	op _._ : NPolicy NPolicy -> NPolicy [ctor assoc metadata "sequencing" prec 40] .
+	op _<-_ : Field Nat -> NPolicy [ctor metadata "modification" prec 39] .
+	op _* : NPolicy -> NPolicy [ctor metadata "kleene star" prec 38] .
+endfm
+
+fmod COMM is
+    protecting NETKAT .
+    sorts Comm Channel .
+
+    op _?_ : Channel NPolicy -> Comm .
+	op _!_ : Channel NPolicy -> Comm .
+endfm
+
+view Comm from TRIV to COMM is
+	sort Elt to Comm .
+endv
+
+fmod DNA is
+	protecting FIELD .
+	protecting NAT .
+	protecting PREDICATE .
+	protecting NETKAT .
+	protecting COMM .
+	protecting TRUTH-VALUE .
+	protecting SET {Comm} * (sort Set {Comm} to TermSet) .
+
+	sorts DNA Recursive .
+	subsort Recursive < DNA .
+
+	op _o+_ : DNA DNA -> DNA [ctor comm assoc metadata "nondeterministic choice" prec 43] .
+	op _;_ : NPolicy DNA -> DNA [ctor metadata "sequential composition" prec 40 gather (E e)] .
+	op _;_ : Comm DNA -> DNA [ctor metadata "sequential composition" prec 40 gather (E e)] .
+	op _||_ : DNA DNA -> DNA [ctor comm metadata "parallel composition" prec 42 gather (E e)] . ---having assoc on this causes a lot of CRs!
+
+	op _|_ : DNA DNA -> DNA [ctor comm prec 42 gather (E e)] . ---having assoc on this causes a lot of CRs! (due to A12)
+	op _||<_ : DNA DNA -> DNA [ctor metadata "left merge" prec 42 gather (E e)] .
+
+	op bot : -> DNA .
+	op rcfg(_,_) : Channel NPolicy -> Comm .
+
+	op delta{_}(_) : TermSet DNA -> DNA . 
+	op pi{_}(_) : Nat DNA -> DNA .
+
+	op @NetKAT(_) : NPolicy -> NPolicy [strat(0)] .
+	op parseCond(_) : NPolicy -> Bool .
+
+
+	var D : DNA .
+	var N : NPolicy .
+
+
+	ceq N ; D = @NetKAT(N) ; D if parseCond(N) .
+	eq parseCond(@NetKAT(N)) = false .
+	eq parseCond(N) = true [owise] .
+endfm

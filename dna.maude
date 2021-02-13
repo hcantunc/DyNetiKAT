@@ -1,0 +1,172 @@
+fmod FIELD is
+	sort Field .
+endfm
+
+fmod PREDICATE is	
+	protecting FIELD .
+	protecting NAT .
+	sort Predicate .
+
+	op one : -> Predicate [ctor] .
+	op zero : -> Predicate [ctor] .	
+
+	op _=_ : Field Nat -> Predicate [ctor metadata "test" prec 39] .
+	op ~_ : Predicate -> Predicate [ctor metadata "negation" prec 38] .
+	op _+_ : Predicate Predicate -> Predicate [ctor comm assoc metadata "disjunction" prec 43] .
+	op _._ : Predicate Predicate -> Predicate [ctor assoc metadata "conjunction" prec 40] .
+endfm
+
+fmod NETKAT is
+    protecting PREDICATE .
+	protecting FIELD .
+	protecting NAT .
+
+	sort NPolicy .
+	subsort Predicate < NPolicy .
+
+	op _+_ : NPolicy NPolicy -> NPolicy [ctor comm assoc metadata "nondeterministic choice" prec 43] .
+	op _._ : NPolicy NPolicy -> NPolicy [ctor assoc metadata "sequencing" prec 40] .
+	op _<-_ : Field Nat -> NPolicy [ctor metadata "modification" prec 39] .
+	op _* : NPolicy -> NPolicy [ctor metadata "kleene star" prec 38] .
+endfm
+
+fmod COMM is
+    protecting NETKAT .
+    sorts Comm Channel .
+
+    op _?_ : Channel NPolicy -> Comm .
+	op _!_ : Channel NPolicy -> Comm .
+endfm
+
+view Comm from TRIV to COMM is
+	sort Elt to Comm .
+endv
+
+fmod DNA is
+	protecting FIELD .
+	protecting NAT .
+	protecting PREDICATE .
+	protecting NETKAT .
+	protecting COMM .
+	protecting TRUTH-VALUE .
+	protecting SET {Comm} * (sort Set {Comm} to TermSet) .
+
+	sorts DNA Recursive .
+	subsort Recursive < DNA .
+
+	op _o+_ : DNA DNA -> DNA [ctor comm assoc metadata "nondeterministic choice" prec 43] .
+	op _;_ : NPolicy DNA -> DNA [ctor metadata "sequential composition" prec 40 gather (E e)] .
+	op _;_ : Comm DNA -> DNA [ctor metadata "sequential composition" prec 40 gather (E e)] .
+	op _||_ : DNA DNA -> DNA [ctor comm metadata "parallel composition" prec 42 gather (E e)] . ---having assoc on this causes a lot of CRs!
+	
+	op _|_ : DNA DNA -> DNA [ctor comm prec 42 gather (E e)] . ---having assoc on this causes a lot of CRs! (due to A12)
+	op _||<_ : DNA DNA -> DNA [ctor metadata "left merge" prec 42 gather (e E)] .
+
+	op bot : -> DNA .
+	op rcfg(_,_) : Channel NPolicy -> Comm .
+
+	op delta{_}(_) : TermSet DNA -> DNA . 
+	op pi{_}(_) : Nat DNA -> DNA .
+
+
+	var H : TermSet .
+	var M : Nat .
+	var X : Channel .
+	vars P Q R : DNA .
+	vars N Z : NPolicy .
+
+
+	eq zero ; P = bot .
+
+	eq [A0] : (N + Z) ; R = N ; R o+ Z ; R .
+	---A1: added comm to _o+_
+	---A2: added assoc to _o+_
+	eq [A3] : (P o+ P) = P .
+	eq [A4] : (P o+ bot) = P .
+	---A5: added comm to _||_
+	---A6: added assoc to _||_
+	eq [A7] : (P || bot) = P .
+	eq [A8] : (P || Q) = P ||< Q o+ Q ||< P o+ P | Q .
+	eq [A9] : (bot ||< P) = bot .
+
+	eq [A10-netkat] : (N ; P) ||< Q = N ; (P || Q) .
+	eq [A10-send] : ((X ! N) ; Q) ||< R = ((X ! N) ; (Q || R)) .
+	eq [A10-receive] : ((X ? N) ; Q) ||< R = ((X ? N) ; (Q || R)) .
+	eq [A10-rcfgu] : ((rcfg(X, N)) ; Q) ||< R = ((rcfg(X, N)) ; (Q || R)) .
+
+	eq [A11] : (P o+ Q) ||< R = (P ||< R) o+ (Q ||< R) .
+	
+	eq [A12] : ((X ? N) ; Q) | ((X ! N) ; R) = (rcfg(X, N)) ; (Q || R) .
+	eq [A13] : (P o+ Q) | R = (P | R) o+ (Q | R) .
+	---A14: added comm to _|_
+	ceq [A16] : P | Q = bot if not (P :: Recursive) /\ not (Q :: Recursive) [owise] .
+
+
+	eq [D1] : delta{H}(bot) = bot .
+	eq [D-netkat] : delta{H}(N ; Q) = N ; delta{H}(Q) .
+	ceq [D-receive] : delta{H}((X ? N) ; Q) = (X ? N) ; delta{H}(Q) if not ((X ? N) in H) .
+    ceq [D-send] : delta{H}((X ! N) ; Q) = (X ! N) ; delta{H}(Q) if not ((X ! N) in H) .
+    ceq [D-rcfg] : delta{H}((rcfg(X, N)) ; Q) = (rcfg(X, N)) ; delta{H}(Q) if not ((rcfg(X, N)) in H) .
+	ceq [D-bot-receive] : delta{H}((X ? N) ; Q) = bot if ((X ? N) in H) .
+    ceq [D-bot-send] : delta{H}((X ! N) ; Q) = bot if ((X ! N) in H) .
+    ceq [D-bot-rcfg] : delta{H}((rcfg(X, N)) ; Q) = bot if ((rcfg(X, N)) in H) .
+	eq [D-plus] : delta{H}(P o+ Q) = delta{H}(P) o+ delta{H}(Q) .
+
+	
+	eq [PI-0] : pi{0}(P) = bot .
+	eq [PI-1] : pi{M}(bot) = bot .
+	eq [PI-netkat] : pi{s(M)}(N ; Q) = N ; pi{M}(Q) .
+    
+	eq [PI-receive] : pi{s(M)}((X ? N) ; Q) = (X ? N) ; pi{M}(Q) .
+    eq [PI-send] : pi{s(M)}((X ! N) ; Q) = (X ! N) ; pi{M}(Q) .
+    eq [PI-rcfg] : pi{s(M)}((rcfg(X, N)) ; Q) = (rcfg(X, N)) ; pi{M}(Q) .
+	eq [PI-plus] : pi{s(M)}(P o+ Q) = pi{s(M)}(P) o+ pi{s(M)}(Q) .
+
+
+	eq [cr-1] : P ||< bot = P .
+endfm
+
+fmod RECURSIVE-DNA is
+	protecting DNA .
+
+	op getRecPol(_) : Recursive -> DNA .
+
+	var M : Nat .
+	vars P Q R : DNA .
+
+	ceq [rec-1] : pi{s(M)}(P | Q) = pi{s(M)}(getRecPol(P) | Q) if (P :: Recursive) .
+	ceq [rec-2] : pi{s(M)}(P ||< Q) = pi{s(M)}(getRecPol(P) ||< Q) if (P :: Recursive) .
+	ceq [rec-3] : pi{s(M)}(P o+ Q) = pi{s(M)}(getRecPol(P) ||< Q) if (P :: Recursive) .
+	ceq [rec-4] : pi{s(M)}(P) = pi{s(M)}(getRecPol(P)) if (P :: Recursive) .
+
+	ceq [rec-5] : pi{s(M)}((P ||< Q) ||< R) = pi{s(M)}((getRecPol(P) ||< Q) ||< R) if (P :: Recursive) .
+	ceq [rec-6] : pi{s(M)}((P | Q) ||< R) = pi{s(M)}((getRecPol(P) | Q) ||< R) if (P :: Recursive) .
+	ceq [rec-7] : P | (Q ||< R) = P | (getRecPol(Q) ||< R) if (Q :: Recursive) .
+endfm
+
+fmod PROPERTY-CHECKING is
+	protecting RECURSIVE-DNA .
+
+	op head(_) : DNA -> NPolicy . ---extract the netkat policies in the current configuration
+	op tail(_,_) : DNA TermSet -> DNA . ---exctract the next dna policy after reconfigurations
+
+
+	var X : Channel .
+	vars Q D : DNA .
+	var Z : NPolicy .
+	var RS : TermSet .
+	
+
+	---assume that every policy that is an input to the following operators are in the normal form
+	---and they do not contain any X ? P or X ! P terms, i.e. we assume delta operator has been used.
+	eq head(bot) = zero .
+	eq head(Z ; D) = Z + head(D) . 
+	eq head(D o+ Q) = head(D) + head(Q) .
+	eq head(rcfg(X, Z) ; D) = zero .
+
+	eq tail(bot, RS) = bot .
+	eq tail(Z ; D, RS) = tail(D, RS) .
+	eq tail(D o+ Q, RS) = tail(D, RS) o+ tail(Q, RS) .
+	ceq tail(rcfg(X, Z) ; D, RS) = D o+ tail(D, RS) if rcfg(X, Z) in RS .
+	ceq tail(rcfg(X, Z) ; D, RS) = bot if not (rcfg(X, Z) in RS) .
+endfm
