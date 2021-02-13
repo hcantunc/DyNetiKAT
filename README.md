@@ -36,4 +36,4 @@ An example input file may be found in stateful_firewall.json.
 
 ## Note
 
-As already described in the tool's [repository](https://github.com/frenetic-lang/netkat-automata), the NetKAT tool is not being actively developed and users might face certain issues during installation and use. We used the software in provided in the *extended_netkat* branch of the repository.
+As already described in the tool's [repository](https://github.com/frenetic-lang/netkat-automata), the NetKAT tool is not being actively developed and users might face certain issues during installation and use. We used the software provided in the *extended_netkat* branch of the repository.
