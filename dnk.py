@@ -133,7 +133,7 @@ if __name__ == "__main__":
 
     if options.normalize:
         # if the policies are not already normalized
-        # we any of the NetKAT policies are equal to 0
+        # we need to check if any of the NetKAT policies are equal to 0
         # if some NetKAT term is equal to 0 then 
         # what follows after that term is insignificant
         insertRecursiveDefs(parser_file, data['module_name'], data['recursive_variables'], data['channels'].values(), data['fields'], False)
