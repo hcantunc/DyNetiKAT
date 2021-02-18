@@ -31,41 +31,6 @@ class MaudeComm:
 
         return solutions
 
-    def process_match_solutions(self, output, match_terms):
-        solutions = output.decode('utf-8')
-        result = {}
-
-        if "No match." in solutions:
-            return None
-        else:
-            split = re.findall('Solution [0-9]*', solutions)
-            split.append("Bye")
-
-            indv_sol = []
-            
-            for i, x in enumerate(split):
-                if "Bye" in x:
-                    break
-                solutions = solutions.split(x, 1)[1]
-                solutions = solutions.split('\n')
-                current_solution = ""
-                for y in solutions:
-                    if split[i + 1] in y:
-                        break
-                    if "-->" in y:
-                        current_solution = current_solution + "\n" + y
-                    elif "    " in y:
-                        current_solution = current_solution + " " + y
-                indv_sol.append(current_solution)
-                solutions = '\n'.join(solutions)
-            
-            for i, x in enumerate(indv_sol):
-                for z in x.rstrip().lstrip().split('\n'):
-                    k = re.search('(.*?) -->', z).group().replace('\n', '').replace('    ', ' ').replace('-->', '').rstrip().lstrip()
-                    match_terms[k] = z.split("-->")[1].replace('\n', '').replace('    ', ' ').rstrip().lstrip()
-                result[i] = match_terms.copy()
-        return result
-
     def export_file(self, filename, terms):
         f = open(filename, "w")
         f.write(terms)
