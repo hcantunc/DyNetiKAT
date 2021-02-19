@@ -60,7 +60,6 @@ def insertRecursiveDefs(maude_file, module, recursive_variables, channels, field
     elif len(recursive_variables) > 1:
         lines.append("\tops {} : -> Recursive .\n".format(' '.join(recursive_variables.keys())))
 
-    channels = list(channels)
     if len(channels) == 1:
         lines.append("\top {} : -> Channel .\n".format(channels[0]))
     elif len(channels) > 1:
@@ -157,7 +156,7 @@ if __name__ == "__main__":
         # we need to check if any of the NetKAT policies are equal to 0
         # if some NetKAT term is equal to 0 then 
         # what follows after that term is insignificant
-        insertRecursiveDefs(parser_file, data['module_name'], data['recursive_variables'], data['channels'].values(), data['fields'], False)
+        insertRecursiveDefs(parser_file, data['module_name'], data['recursive_variables'], data['channels'], data['fields'], False)
 
         parsed_terms = {}
         netkat_terms = {}
@@ -183,7 +182,7 @@ if __name__ == "__main__":
     else:
         # if normalize is false then just extract the  
         # communication terms to comptue the delta h set 
-        insertRecursiveDefs(parser_file, data['module_name'], data['recursive_variables'], data['channels'].values(), data['fields'], False)
+        insertRecursiveDefs(parser_file, data['module_name'], data['recursive_variables'], data['channels'], data['fields'], False)
 
         parsed_terms = {}
         for k, v in data['recursive_variables'].items():
@@ -193,7 +192,7 @@ if __name__ == "__main__":
                 data['comm'].add(x)
 
 
-    insertRecursiveDefs(dna_file, data['module_name'], data['recursive_variables'], data['channels'].values(), data['fields'], True)
+    insertRecursiveDefs(dna_file, data['module_name'], data['recursive_variables'], data['channels'], data['fields'], True)
 
 
     # perform property checking

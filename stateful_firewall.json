@@ -12,6 +12,7 @@
         "Switch'": "(pt = 1 . pt <- 2) ; Switch' o+ (pt = 2 . pt <- 1) ; Switch' o+ (secConEnd ? one) ; Switch",
         "Host": "(secConReq ! one) ; Host o+ (secConEnd ! one) ; Host"
     }, 
+    "channels": ["secConReq", "secConEnd"], 
     "program": "Host || Switch", 
     "module_name": "STATEFUL-FIREWALL", 
     "properties": {

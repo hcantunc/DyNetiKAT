@@ -26,6 +26,7 @@ python dnk.py <path_to_maude> <path_to_netkat> <input_file>
 * out_packets: A list of predicates describing the egress points, e.g. ["sw = 2 . pt = 2"]. Note that every element in this list must have a corresponding element in *in_packets* list with the same index. 
 * pi_unfolding: The maximum number of unfoldings of the projection operator.
 * recursive_variables: Names and definitions of recursive variables that appear in the program.
+* channels: Names of the channels that appear in the program.
 * program: The program to execute.
 * module_name: The name of the module that is going to be included in the Maude programs.
 * properties: A dictionary which contains a list of properties for every pair of elements in the lists *in_packets* and *out_packets*. 
