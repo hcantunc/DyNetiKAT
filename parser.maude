@@ -68,14 +68,16 @@ fmod DNA is
 	op delta{_}(_) : TermSet DNA -> DNA . 
 	op pi{_}(_) : Nat DNA -> DNA .
 
+	op @Comm(_,_) : Channel NPolicy -> Comm [strat(0)] .
 	op @NetKAT(_) : NPolicy -> NPolicy [strat(0)] .
 	op parseCond(_) : NPolicy -> Bool .
 
-
+	var X : Channel .
 	var D : DNA .
 	var N : NPolicy .
 
-
+	eq (X ! N) ; D = @Comm(X, N) ; D .
+	eq (X ? N) ; D = @Comm(X, N) ; D .
 	ceq N ; D = @NetKAT(N) ; D if parseCond(N) .
 	eq parseCond(@NetKAT(N)) = false .
 	eq parseCond(N) = true [owise] .

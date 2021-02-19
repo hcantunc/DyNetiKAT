@@ -20,6 +20,10 @@ def extractNetkat(policy):
     split = [re.search('@NetKAT(.*)', x).group(1).rstrip().lstrip() for x in policy.split(';') if "@NetKAT" in x]
     return split
 
+def extractComm(policy):
+    split = [re.search('@Comm(.*)', x).group(1).rstrip().lstrip().replace('(','').replace(')','') for x in policy.split(';') if "@Comm" in x]
+    return split
+
 def insertRecursiveDefs(maude_file, module, recursive_variables, channels, fields, insert_equations):
     #check whether the module is already contained 
     with open(maude_file, "r") as in_file:
@@ -73,18 +77,34 @@ def insertRecursiveDefs(maude_file, module, recursive_variables, channels, field
 
     lines.append("endfm")
 
-
     with open(maude_file, "a") as out_file:
         for line in lines:
             out_file.write(line)
 
 
-def compute_encapsulation_set(channels, FT):
+def clean_maude_files(maude_file, module):
+    with open(maude_file, "r") as in_file:
+        buf = in_file.readlines()
+
+    inside_module = False
+    with open(maude_file, "w") as out_file:
+        for line in buf:
+            if "fmod {} is".format(module) in line :
+                inside_module = True 
+            elif "endfm" in line and inside_module == True:
+                inside_module = False
+            elif not inside_module:
+                out_file.write(line)
+
+    with open(maude_file, "r") as in_file:
+        buf = in_file.readlines()
+
+def compute_encapsulation_set(comm):
     delta_h = []
-    for k, v in channels.items():
-        for x in FT[k]:
-            delta_h.append("{} ! {}".format(v, x))
-            delta_h.append("{} ? {}".format(v, x))
+    for x in comm:
+        channel, ft = x.split(',')
+        delta_h.append("{} ! {}".format(channel, ft))
+        delta_h.append("{} ? {}".format(channel, ft))
     return delta_h
 
 def is_json(f):
@@ -130,6 +150,7 @@ if __name__ == "__main__":
     netkat_parser = NetKATComm(netkat_path, generate_outfile("netkat"))
     maude_parser = MaudeComm(maude_path, parser_file, dna_file, generate_outfile("maude"))
 
+    data["comm"] = set()
 
     if options.normalize:
         # if the policies are not already normalized
@@ -144,6 +165,10 @@ if __name__ == "__main__":
             # parse with maude and extract netkat terms
             parsed_terms[k] = maude_parser.parse(data['module_name'], v)
             netkat_terms[k] = extractNetkat(parsed_terms[k])
+            comm = extractComm(parsed_terms[k])
+            for x in comm:
+                data['comm'].add(x)
+            
 
             for x in netkat_terms[k]:
                 #check if the NetKAT terms are equal to 0
@@ -155,14 +180,25 @@ if __name__ == "__main__":
     
         with open("normalized.json", 'w') as f:
             json.dump(data['recursive_variables'], f, ensure_ascii=False, indent=4)
-    
-    insertRecursiveDefs(dna_file, data['module_name'], data['recursive_variables'], data['channels'].values(), data['fields'], True)
+    else:
+        # if normalize is false then just extract the  
+        # communication terms to comptue the delta h set 
+        insertRecursiveDefs(parser_file, data['module_name'], data['recursive_variables'], data['channels'].values(), data['fields'], False)
 
+        parsed_terms = {}
+        for k, v in data['recursive_variables'].items():
+            parsed_terms[k] = maude_parser.parse(data['module_name'], v)
+            comm = extractComm(parsed_terms[k])
+            for x in comm:
+                data['comm'].add(x)
+
+
+    insertRecursiveDefs(dna_file, data['module_name'], data['recursive_variables'], data['channels'].values(), data['fields'], True)
 
 
     # perform property checking
     pi_program = data['program']
-    delta_h = compute_encapsulation_set(data['channels'], data['flow_tables'])   
+    delta_h = compute_encapsulation_set(data["comm"])   
     
 
     p = "delta{" + ', '.join(delta_h) + "}(pi{"+ str(data['pi_unfolding']) +"}(" + pi_program + "))"
@@ -196,3 +232,9 @@ if __name__ == "__main__":
             print("Packet: #{}, property: #{}: property satisfied.".format(q, counter))
         else:
             print("Packet: #{}, property: #{}: property violated.".format(q, counter))
+
+
+
+    #remove the inserted module declarations in the maude files
+    for x in [parser_file, dna_file]:
+        clean_maude_files(x, data['module_name'])
