@@ -1,4 +1,4 @@
-This is a network verification tool based on the *DyNetKAT* language. We build upon the reachability checking method in [NetKAT](https://dl.acm.org/doi/10.1145/2578855.2535862) where checking for reachability is reduced to equivalence checking. The inputs to our tool are a *DyNetKAT* program *p*, a list of input predicates *in*, a list of output predicates *out*, and the equivalences that describe the desired properties. Our tool utilizes the Maude Rewriting Logic and the NetKAT tool in the background.
+This is a network verification tool based on the [DyNetKAT](https://arxiv.org/abs/2102.10035) language. We build upon the reachability checking method in [NetKAT](https://dl.acm.org/doi/10.1145/2578855.2535862) where checking for reachability is reduced to equivalence checking. The inputs to our tool are a *DyNetKAT* program *p*, a list of input predicates *in*, a list of output predicates *out*, and the equivalences that describe the desired properties. Our tool utilizes the Maude Rewriting Logic and the NetKAT tool in the background.
 
 
 ## Requirements
