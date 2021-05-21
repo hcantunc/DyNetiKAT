@@ -1,0 +1,57 @@
+fmod FIELD is
+	sort Field .
+endfm
+
+fmod COMM is
+	protecting STRING .
+	sorts Comm Channel .
+
+	op _?_ : Channel String -> Comm .
+	op _!_ : Channel String -> Comm .
+endfm
+
+view Comm from TRIV to COMM is
+	sort Elt to Comm .
+endv
+
+fmod DNA is
+	protecting FIELD .
+	protecting COMM .
+	protecting TRUTH-VALUE .
+	protecting SET {Comm} * (sort Set {Comm} to TermSet) .
+
+	sorts DNA Recursive .
+	subsort Recursive < DNA .
+
+	op _o+_ : DNA DNA -> DNA [ctor comm assoc metadata "nondeterministic choice" prec 43] .
+	op _;_ : String DNA -> DNA [ctor metadata "sequential composition" prec 40 gather (E e)] .
+	op _;_ : Comm DNA -> DNA [ctor metadata "sequential composition" prec 40 gather (E e)] .
+	op _||_ : DNA DNA -> DNA [ctor comm metadata "parallel composition" prec 42 gather (E e)] .
+
+	op _|_ : DNA DNA -> DNA [ctor comm prec 42 gather (E e)] .
+	op _||<_ : DNA DNA -> DNA [ctor metadata "left merge" prec 42 gather (E e)] .
+
+	op zero : -> String .
+	op bot : -> DNA .
+	op rcfg(_,_) : Channel String -> Comm .
+
+	op delta{_}(_) : TermSet DNA -> DNA . 
+	op pi{_}(_) : Nat DNA -> DNA .
+
+	op @Comm(_,_) : Channel String -> Comm [strat(0)] .
+	op @NetKAT(_) : String -> String [strat(0)] .
+	op parseCond(_) : String -> Bool .
+
+	var X : Channel .
+	var D : DNA .
+	var N : String .
+
+	eq (X ! N) ; D = @Comm(X, N) ; D .
+	eq (X ? N) ; D = @Comm(X, N) ; D .
+	ceq N ; D = @NetKAT(N) ; D if parseCond(N) .
+	eq parseCond(@NetKAT(N)) = false .
+	eq parseCond(N) = true [owise] .
+endfm
+
+
+
