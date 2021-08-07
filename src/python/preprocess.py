@@ -1,8 +1,7 @@
 import re
 from multiprocessing import Pool
-from .maude_parser import MaudeComm
-from .netkat_parser import NetKATComm
-
+from src.python.maude_parser import MaudeComm
+from src.python.netkat_parser import NetKATComm
 
 
 
@@ -31,7 +30,6 @@ class Preprocessing:
         lines.append("\tprotecting DNA .\n")
         if insert_equations:
             lines.append("\tprotecting PROPERTY-CHECKING .\n\n")
-        
 
         if len(recursive_variables) == 1:
             lines.append("\top {} : -> Recursive .\n".format(recursive_variables.keys[0]))
@@ -42,7 +40,6 @@ class Preprocessing:
             lines.append("\top {} : -> Channel .\n".format(channels[0]))
         elif len(channels) > 1:
             lines.append("\tops {} : -> Channel .\n\n".format(' '.join(channels)))
-
 
         if insert_equations:
             for k, v in recursive_variables.items():
@@ -59,6 +56,7 @@ class Preprocessing:
         netkat_terms = [re.search('@NetKAT(.*)', x).group(1).rstrip().lstrip() for x in policy.split(';') if "@NetKAT" in x]
         return ['"' + re.search('"(.*)"', x).group(1).rstrip().lstrip() + '"' for x in netkat_terms if '"' in x]
 
+
     def extract_comm_terms(self, policy):
         return [re.search('@Comm(.*)', x).group(1).rstrip().lstrip() for x in policy.split(';') if "@Comm" in x]
 
@@ -72,18 +70,17 @@ class Preprocessing:
         if not self.preprocessed:
             maude_parser = MaudeComm(self.direct, self.maude_path, self.generate_outfile("preprocess_maude"))
 
-            #if the policies are not already normalized
-            #we need to check if any of the NetKAT policies are equal to 0
-            #if some NetKAT term is equal to 0 then 
-            #what follows after that term is insignificant
-            self.generate_maude_file(data['file_name'], data['module_name'], self.maude_preprocess_file, data['recursive_variables'], data['channels'], False)
-            
+            # if the policies are not already normalized we need to check if any of the NetKAT policies are
+            # equal to 0. If some NetKAT term is equal to 0 then what follows after that term is insignificant
+            self.generate_maude_file(data['file_name'], data['module_name'], self.maude_preprocess_file,
+                                     data['recursive_variables'], data['channels'], False)
+
             parsed_terms = {}
             netkat_terms = {}
-        
+
             netkat_results = {}
 
-            if self.num_threads == None:
+            if self.num_threads is None:
                 netkat_pool = Pool()
             else:
                 netkat_pool = Pool(processes=self.num_threads)
@@ -93,20 +90,17 @@ class Preprocessing:
                 # parse with maude and extract netkat terms and communication terms
                 parsed_terms[k] = maude_parser.parse(data['file_name'], data['module_name'], v)
                 netkat_terms[k] = self.extract_netkat(parsed_terms[k])
-                
 
                 for i, x in enumerate(netkat_terms[k]):
-                    #check if the NetKAT terms are equal to 0
-                    #if so rewrite them as 0 so that 0 ; P = bot axiom can apply
+                    # check if the NetKAT terms are equal to 0
+                    # if so rewrite them as 0 so that 0 ; P = bot axiom can apply
                     netkat_results[(k, i)] = netkat_pool.apply_async(self.netkat_process, args=(x, k, i))
-                
 
-                #extract the policies that are being communicated.
-                #these are going to be used while using the encapsulation operator
+                # extract the policies that are being communicated.
+                # these are going to be used while using the encapsulation operator
                 comm = self.extract_comm_terms(parsed_terms[k])
                 for x in comm:
                     data['comm'].add(x)
-
 
             netkat_pool.close()
             netkat_pool.join()
@@ -114,11 +108,6 @@ class Preprocessing:
                 if v.get() == 'true':
                     data['recursive_variables'][k] = data['recursive_variables'][k].replace(netkat_terms[k][i], 'zero')
 
-
         self.generate_maude_file(data['file_name'], data['module_name'], self.maude_dnk_file, data['recursive_variables'], data['channels'], True)
 
-
         return data
-
-
-

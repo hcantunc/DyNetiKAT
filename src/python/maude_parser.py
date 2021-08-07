@@ -1,6 +1,6 @@
 import subprocess
 import re
-import os 
+import os
 
 
 
@@ -13,13 +13,13 @@ class MaudeComm:
 
     def comm(self, program, cmd):
         proc = subprocess.run(['{} {} {}'.format(self.maude_path, program, cmd)],
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE,
-                                shell=True,
-                                cwd=self.direct)
+                              stdin=subprocess.PIPE,
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE,
+                              shell=True,
+                              cwd=self.direct)
 
-        return proc.stdout.decode('utf-8')    
+        return proc.stdout.decode('utf-8')
 
 
     def process_solutions(self, output):
@@ -34,18 +34,15 @@ class MaudeComm:
     def export_file(self, filename, terms):
         with open(filename, "w") as f:
             f.write(terms)
-        
+
 
     def parse(self, file_name, module, term):
-        terms = 'red in {} : {} .'.format(module, term) 
+        terms = 'red in {} : {} .'.format(module, term)
         self.export_file(self.out_file, terms)
         output = self.comm(file_name, self.out_file)
         output = self.process_solutions(output)
-        
+
         if os.path.exists(self.out_file):
             os.remove(self.out_file)
 
         return output
-
-
-

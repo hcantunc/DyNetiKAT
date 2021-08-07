@@ -10,11 +10,9 @@ fmod COMM is
 	op _!_ : Channel String -> Comm .
 endfm
 
-
 view Comm from TRIV to COMM is
 	sort Elt to Comm .
 endv
-
 
 fmod DNA is
 	protecting FIELD .
@@ -71,7 +69,7 @@ fmod DNA is
 	eq [A12] : ((X ? N) ; Q) | ((X ! N) ; R) = (rcfg(X, N)) ; (Q || R) .
 	eq [A13] : (P o+ Q) | R = (P | R) o+ (Q | R) .
 	---A14: added comm to _|_
-	ceq [A16] : P | Q = bot if not (P :: Recursive) /\ not (P :: UnguardedTerm) /\ not (Q :: Recursive) /\ not (Q :: UnguardedTerm) [owise] .
+	ceq [A15] : P | Q = bot if not (P :: Recursive) /\ not (P :: UnguardedTerm) /\ not (Q :: Recursive) /\ not (Q :: UnguardedTerm) [owise] .
 
 
 	eq [D1] : delta{H}(bot) = bot .
@@ -97,7 +95,6 @@ fmod DNA is
 
 	eq [cr-1] : P ||< bot = P .
 endfm
-
 
 fmod RECURSIVE-DNA is
 	protecting DNA .
@@ -129,7 +126,6 @@ fmod RECURSIVE-DNA is
 	cmb [rec-2] : P || Q : UnguardedTerm if ((P :: Recursive) or (P :: UnguardedTerm)) .
 	cmb [rec-3] : P ||< Q : UnguardedTerm if ((P :: Recursive) or (P :: UnguardedTerm)) .
 endfm
-
 
 fmod PROPERTY-CHECKING is
 	protecting RECURSIVE-DNA .
