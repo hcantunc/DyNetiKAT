@@ -58,7 +58,7 @@ For a given DyNetKAT term `D` we first apply our equational reasoning framework 
 In our tool a property is defined as 4-tuple containing the following elements:
 
  1. The first element describes the type of property and can be either `r` or `w` where `r` denotes a reachability property and `w` denotes a waypointing property.
- 2. The second element is the property itself. The constructs that can be used to define a property are as follows: `head(@Program)`, `tail(@Program, R)`. Here, `@Program` is referring to DyNetKAT program that is given as input, and `R` is a set containing elements of shape `rcfg(X,N)`. 
+ 2. The second element is the property itself. The constructs that can be used to define a property are as follows: `head(@Program)`, `tail(@Program, R)`. Here, `@Program` is a special construct that refers to DyNetKAT program that is given as input, and `R` is a set containing elements of shape `rcfg(X,N)`. 
  3.  For reachability properties, the third element can be either `!0` or `=0` where `!0` denotes that the associated egress point should be reachable from the associated ingress point, whereas `=0` denotes that the associated egress should be unreachable from the associated ingress point. For waypointing properties, the third element is a predicate which denotes the waypoint.
  4. The fourth element denotes the maximum number of unfoldings to perform in the projection operator.
  
