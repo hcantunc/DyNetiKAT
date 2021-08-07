@@ -92,8 +92,9 @@ Note that the NetKAT terms inside the definitions must be enclosed with double q
 
 * module_name: The name of the program. The output files will be based on this name.
 
-* properties: A dictionary which contains a list of properties. All the properties are associated with an ingress and egress point from the *in_packets* and *out_packets*. For example, consider the following encoding:
-`{ "first_packet": [["r", 
+* properties: A dictionary which contains a list of properties. All the properties are associated with an ingress and egress point from the *in_packets* and *out_packets*. For example, consider the following encoding: 
+   
+   `{ "first_packet": [["r", 
                 "head(@Program)", 
                 "!0", 
                 100], 
@@ -105,8 +106,9 @@ Note that the NetKAT terms inside the definitions must be enclosed with double q
                 "head(@Program)",  
                 "!0", 
                 100]] 
-    }` 
-The above encoding defines a reachability property and a waypointing property for the `first_packet` and a reachability property for the`second_packet`.     
+    }`
+    
+  The above encoding defines a reachability property and a waypointing property for the `first_packet` and a reachability   property for the`second_packet`.     
 
 An example input file can be found in benchmarks/stateful_firewall.json.
 
