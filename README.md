@@ -45,7 +45,7 @@ The NetKAT operators are encoded as follows:
 
 ## Properties
 
-Two types of properties can be checked with DyNetiKAT: reachability and waypointing. Our procedure for checking such properties builds upon the methods introduced in NetKAT for checking reachability and waypointing properties. In NetKAT, these properties are defined with respect to an ingress point <img src="https://render.githubusercontent.com/render/math?math=in">,  an egress point  <img src="https://render.githubusercontent.com/render/math?math=out">,  a  switch  policy  <img src="https://render.githubusercontent.com/render/math?math=p"> , a topology  <img src="https://render.githubusercontent.com/render/math?math=t"> and, a waypoint <img src="https://render.githubusercontent.com/render/math?math=w"> for waypointing properties.  The following NetKAT  equivalences characterize reachability and waypointing properties:  
+Two types of properties can be checked with DyNetiKAT: reachability and waypointing. Our procedure for checking such properties builds upon the methods introduced in NetKAT for checking reachability and waypointing properties. In NetKAT, these properties are defined with respect to an ingress point <img src="https://render.githubusercontent.com/render/math?math=in">,  an egress point  <img src="https://render.githubusercontent.com/render/math?math=out">, a  switch  policy  <img src="https://render.githubusercontent.com/render/math?math=p"> , a topology  <img src="https://render.githubusercontent.com/render/math?math=t"> and, a waypoint <img src="https://render.githubusercontent.com/render/math?math=w"> for waypointing properties.  The following NetKAT  equivalences characterize reachability and waypointing properties:  
 
  1. <img src="https://render.githubusercontent.com/render/math?math=in \cdot (p \cdot t)^* \cdot out \nequiv 0"> 
  2. <img src="https://render.githubusercontent.com/render/math?math=in \cdot (p \cdot t)^* \cdot out \equiv 0"> 
@@ -53,7 +53,7 @@ Two types of properties can be checked with DyNetiKAT: reachability and waypoint
 
 If the equivalence in (1) holds then this implies that the egress point is reachable from the ingress point. Analogously, if the equivalence in (2) holds then this implies that the egress point is not reachable from the ingress point.  If the equivalence in (3) holds then this implies that all the packets from the ingress point to the egress point travel through the waypoint. DyNetKAT provides a mechanism that enables checking such properties in a dynamic setting. This entails utilizing the operators `head(D)` and `tail(D, R)` where `D` is a DyNetKAT term and `R` is a set of terms of shape `rcfg(X, N).` Intuitively, the operator  `head(D)` returns a NetKAT policy which represents the current configuration in the input `D`.  The operator `tail(D, R)` returns  a  DyNetKAT  policy  which is the sum of DyNetKAT policies inside `D` that appear after the synchronization events in  `R`.  Please see [here](https://arxiv.org/abs/2102.10035) for more details on the `head` and `tail` operators. 
 
-For a given DyNetKAT term `D` we first apply our equational reasoning framework to unfold the expression and rewrite it into the normal form. This is achieved by utilizing the projection operator <img src="https://render.githubusercontent.com/render/math?math=\pi_n(-)">. Note that the number of unfoldings (i.e. the value `n` inside the projection operator) is a fixed value specified by the user. We then apply the restriction operator <img src="https://render.githubusercontent.com/render/math?math=\delta_H(-)"> to . The term that we compute in is as follows: <img src="https://render.githubusercontent.com/render/math?math=\delta_H(\pi_n(D))"> where H is the set of all terms of shape `X!Z` and `X?Z` that appear in `D`. Then, we extract the desired configurations by using the head and tail operators. After this step, the resulting expression is a purely NetKAT term  and  we  utilize  the  NetKAT  decision  procedure  for  checking  the  desired properties.
+For a given DyNetKAT term `D` we first apply our equational reasoning framework to unfold the expression and rewrite it into the normal form. This is achieved by utilizing the projection operator <img src="https://render.githubusercontent.com/render/math?math=\pi_n(-)">. Note that the number of unfoldings (i.e. the value `n` inside the projection operator) is a fixed value specified by the user. We then apply the restriction operator <img src="https://render.githubusercontent.com/render/math?math=\delta_H(-)"> on the resulting expression and eliminate the terms of shape `X!Z` and `X?Z`. That is, we compute the term <img src="https://render.githubusercontent.com/render/math?math=\delta_H(\pi_n(D))"> where H is the set of all terms of shape `X!Z` and `X?Z` that appear in `D`. Then, we extract the desired configurations by using the head and tail operators. After this step, the resulting expression is a purely NetKAT term  and  we  utilize  the  NetKAT  decision  procedure  for  checking  the  desired properties.
 
 In our tool a property is defined as 4-tuple containing the following elements:
 
@@ -61,7 +61,8 @@ In our tool a property is defined as 4-tuple containing the following elements:
  2. The second element is the property itself. The constructs that can be used to define a property are as follows: `head(@Program)`, `tail(@Program, R)`. Here, `@Program` is referring to DyNetKAT program that is given as input, and `R` is a set containing elements of shape `rcfg(X,N)`. 
  3.  For reachability properties, the third element can be either `!0` or `=0` where `!0` denotes that the associated egress point should be reachable from the associated ingress point, whereas `=0` denotes that the associated egress should be unreachable from the associated ingress point. For waypointing properties, the third element is a predicate which denotes the waypoint.
  4. The fourth element denotes the maximum number of unfoldings to perform in the projection operator.
- For an example,  `(r, head(@Program), !0, 100)` encodes a reachability property and `(w, head(@Program), sw = 1, 100)` encodes a waypointing property. Furthermore, every property is associated with an ingress point and an egress point. 
+ 
+For an example, `(r, head(@Program), !0, 100)` encodes a reachability property and `(w, head(@Program), sw = 1, 100)` encodes a waypointing property. Furthermore, every property is associated with an ingress point and an egress point. 
 
 
 ## Input format
@@ -92,8 +93,9 @@ Note that the NetKAT terms inside the definitions must be enclosed with double q
 
 * module_name: The name of the program. The output files will be based on this name.
 
-* properties: A dictionary which contains a list of properties. All the properties are associated with an ingress and egress point from the *in_packets* and *out_packets*. For example, consider the following encoding:
-`{ "first_packet": [["r", 
+* properties: A dictionary which contains a list of properties. All the properties are associated with an ingress and egress point from the *in_packets* and *out_packets*. For example, consider the following encoding: 
+   
+   `{ "first_packet": [["r", 
                 "head(@Program)", 
                 "!0", 
                 100], 
@@ -105,8 +107,9 @@ Note that the NetKAT terms inside the definitions must be enclosed with double q
                 "head(@Program)",  
                 "!0", 
                 100]] 
-    }` 
-The above encoding defines a reachability property and a waypointing property for the `first_packet` and a reachability property for the`second_packet`.     
+    }`
+    
+  The above encoding defines a reachability property and a waypointing property for the `first_packet` and a reachability   property for the`second_packet`.     
 
 An example input file can be found in benchmarks/stateful_firewall.json.
 
