@@ -1,4 +1,5 @@
 from multiprocessing import Pool
+from src.python.util import error_handling
 from src.python.maude_parser import MaudeComm
 from src.python.netkat_parser import NetKATComm
 
@@ -45,21 +46,32 @@ class DyNetKAT:
         return "({}) . ({}) . ({}) . ({}) . ({})".format(in_packet, out_term, waypoint, in_term, out_packet)
 
 
-    def process(self, q, counter, prop_type, prop, rr_or_wp, data):
-        try:
-            maude_parser = MaudeComm(self.direct, self.maude_path, self.generate_outfile("maude_" + str(q) + "_" + str(counter)))
-            prop = maude_parser.parse(data['file_name'], data['module_name'], prop)
+    def process(self, q, counter, prop_type, prop_maude, rr_or_wp, data):
+        error_occurred = False
 
+        maude_parser = MaudeComm(self.direct, self.maude_path, self.generate_outfile("maude_" + str(q) + "_" + str(counter)))
+        prop, error = maude_parser.parse(data['file_name'], data['module_name'], prop_maude)
+
+        if prop is None:
+            error_handling("Maude", "packet: {}, property: {}".format(q, counter), prop_maude, error, False)
+            error_occurred = True 
+        else:    
             netkat_parser = NetKATComm(self.direct, self.netkat_path, self.generate_outfile("netkat_" + str(q) + "_" + str(counter)))
             if prop_type == "r":
-                result = netkat_parser.parse(self.hbh_reachability_term(data['in_packets'][q], prop, data['out_packets'][q]), "zero")
+                term1 = self.hbh_reachability_term(data['in_packets'][q], prop, data['out_packets'][q])
+                result, error = netkat_parser.parse(term1, "zero")
             elif prop_type == "w":
-                result = netkat_parser.parse(self.hbh_reachability_term(data['in_packets'][q], prop, data['out_packets'][q]) + " + " +
-                                             self.waypointing_term(data['in_packets'][q], prop, data['out_packets'][q], rr_or_wp),
-                                             self.waypointing_term(data['in_packets'][q], prop, data['out_packets'][q], rr_or_wp))
-        except Exception as err:
-            print("packet: {}, property: {}, error: {}\n\n".format(q, counter, err))
-            return "error"
+                term1 = self.hbh_reachability_term(data['in_packets'][q], prop, data['out_packets'][q]) + " + " +\
+                        self.waypointing_term(data['in_packets'][q], prop, data['out_packets'][q], rr_or_wp)
+                term2 = self.waypointing_term(data['in_packets'][q], prop, data['out_packets'][q], rr_or_wp)
+                result, error = netkat_parser.parse(term1, term2)
+
+            if result is None:
+                error_handling("NetKAT tool", "packet: {}, property: {}".format(q, counter), term1, error, False)
+                error_occurred = True 
+
+        if error_occurred:
+            return None
 
         return result
 
@@ -87,4 +99,3 @@ class DyNetKAT:
             return_dict[k] = v.get()
     
         return return_dict
-

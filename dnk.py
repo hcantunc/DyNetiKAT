@@ -4,6 +4,7 @@ import sys
 import json
 from src.python.preprocess import Preprocessing
 from src.python.dynetkat import DyNetKAT
+from src.python.util import is_exe, is_json
 
 
 
@@ -13,15 +14,6 @@ maude_preprocess_file = direct + '/src/maude/preprocess.maude'
 maude_dnk_file = direct + '/src/maude/dnk.maude'
 maude_path = ''
 netkat_path = ''
-
-
-
-def is_json(fpath):
-    return len(fpath) > 5 and fpath[-5:] == ".json"
-
-
-def is_exe(fpath):
-    return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
 
 if __name__ == "__main__":
@@ -83,7 +75,7 @@ if __name__ == "__main__":
         prop_type = data['properties'][str(packet)][prop_num][0]
         prop_result = data['properties'][str(packet)][prop_num][2]
 
-        if v == "error":
+        if v == None:
             print("Packet: #{} - property: #{}: an error occurred while checking this property."
                   .format(packet, prop_num))
         elif prop_type == "r":
@@ -98,3 +90,4 @@ if __name__ == "__main__":
                 print("Packet: #{} - property: #{}: property satisfied.".format(packet, prop_num))
             else:
                 print("Packet: #{} - property: #{}: property violated.".format(packet, prop_num))
+    

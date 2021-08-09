@@ -2,6 +2,7 @@ import os
 import re
 import subprocess
 import numpy as np
+from src.python.util import export_file, execute_cmd
 
 
 
@@ -13,24 +14,15 @@ class NetKATComm:
 
 
     def comm(self, file1, file2):
-        proc = subprocess.run(['{} equiv {} {}'.format(self.netkat_path, file1, file2)],
-                              stdin=subprocess.PIPE,
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE,
-                              shell=True,
-                              cwd=self.direct)
-
-        return proc.stdout.decode('utf-8')
+        cmd = ['{} equiv {} {}'.format(self.netkat_path, file1, file2)]
+        return execute_cmd(cmd, self.direct)
 
 
     def process_solutions(self, output):
-        split = re.search('expressions equivalent: (.*)', output).group(1)
-        return split
-
-
-    def export_file(self, filename, terms):
-        with open(filename, "w") as f:
-            f.write(terms)
+        try:
+            return re.search('expressions equivalent: (.*)', output).group(1)
+        except Exception:
+            return None
 
 
     def tool_format(self, term1, term2):
@@ -54,10 +46,10 @@ class NetKATComm:
 
         term1, term2 = self.tool_format(term1, term2)
 
-        self.export_file(outfile_1, term1)
-        self.export_file(outfile_2, term2)
+        export_file(outfile_1, term1)
+        export_file(outfile_2, term2)
 
-        output = self.comm(outfile_1, outfile_2)
+        output, error = self.comm(outfile_1, outfile_2)
         output = self.process_solutions(output)
 
         if os.path.exists(outfile_1):
@@ -65,4 +57,4 @@ class NetKATComm:
         if os.path.exists(outfile_2):
             os.remove(outfile_2)
 
-        return output
+        return output, error

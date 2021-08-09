@@ -1,7 +1,9 @@
 import re
+import threading
 from multiprocessing import Pool
 from src.python.maude_parser import MaudeComm
 from src.python.netkat_parser import NetKATComm
+from src.python.util import error_handling
 
 
 
@@ -63,7 +65,10 @@ class Preprocessing:
 
     def netkat_process(self, x, k, i):
         netkat_parser = NetKATComm(self.direct, self.netkat_path, self.generate_outfile("preprocess_netkat_{}_{}".format(k, i)))
-        return netkat_parser.parse(x, "zero")
+        result, error = netkat_parser.parse(x, "zero")
+        if result is None:
+            error_handling("NetKAT tool", k, x, error, True)
+        return result
 
 
     def preprocess(self, data):
@@ -88,7 +93,11 @@ class Preprocessing:
             data["comm"] = set()
             for k, v in data['recursive_variables'].items():
                 # parse with maude and extract netkat terms and communication terms
-                parsed_terms[k] = maude_parser.parse(data['file_name'], data['module_name'], v)
+                parsed_terms[k], error = maude_parser.parse(data['file_name'], data['module_name'], v)
+
+                if parsed_terms[k] is None:
+                    error_handling("Maude", k, v, error, True)
+
                 netkat_terms[k] = self.extract_netkat(parsed_terms[k])
 
                 for i, x in enumerate(netkat_terms[k]):
