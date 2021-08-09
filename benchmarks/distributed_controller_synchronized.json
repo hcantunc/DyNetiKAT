@@ -1,0 +1,55 @@
+{
+    "module_name": "DISTRIBUTED-CONTROLLER-SYNCHRONIZED", 
+    "recursive_variables": {
+        "SDN-16": "\"((pt = 1 . pt <- 3 + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 9 + pt = 5 . pt <- 7 + pt = 11 . pt <- 13) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-16 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-16 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-16 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-16 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-16", 
+        "SDN-15": "\"((pt = 1 . pt <- 3 + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 9 + pt = 5 . pt <- 7 + zero) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-15 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-16 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-15 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-15 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-15", 
+        "SDN-14": "\"((pt = 1 . pt <- 3 + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 9 + pt = 6 . pt <- 7 + pt = 11 . pt <- 13) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-14 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-14 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-16 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-14 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-14", 
+        "SDN-13": "\"((pt = 1 . pt <- 3 + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 9 + pt = 6 . pt <- 7 + zero) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-13 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-14 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-15 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-13 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-13", 
+        "SDN-12": "\"((pt = 1 . pt <- 3 + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 10 + pt = 5 . pt <- 7 + pt = 11 . pt <- 13) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-12 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-12 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-12 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-16 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-12", 
+        "SDN-11": "\"((pt = 1 . pt <- 3 + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 10 + pt = 5 . pt <- 7 + zero) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-11 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-12 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-11 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-15 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-11", 
+        "SDN-10": "\"((pt = 1 . pt <- 3 + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 10 + pt = 6 . pt <- 7 + pt = 11 . pt <- 13) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-10 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-10 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-12 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-14 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-10", 
+        "SDN-7": "\"((zero + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 9 + pt = 5 . pt <- 7 + zero) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-7 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-8 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-7 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-7 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-15", 
+        "SDN-6": "\"((zero + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 9 + pt = 6 . pt <- 7 + pt = 11 . pt <- 13) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-6 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-6 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-8 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-6 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-14", 
+        "SDN-5": "\"((zero + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 9 + pt = 6 . pt <- 7 + zero) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-5 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-6 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-7 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-5 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-13", 
+        "SDN-4": "\"((zero + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 10 + pt = 5 . pt <- 7 + pt = 11 . pt <- 13) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-4 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-4 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-4 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-8 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-12", 
+        "SDN-3": "\"((zero + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 10 + pt = 5 . pt <- 7 + zero) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-3 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-4 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-3 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-7 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-11", 
+        "SDN-2": "\"((zero + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 10 + pt = 6 . pt <- 7 + pt = 11 . pt <- 13) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-2 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-2 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-4 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-6 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-10", 
+        "SDN-1": "\"((zero + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 10 + pt = 6 . pt <- 7 + zero) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-1 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-2 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-3 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-5 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-9", 
+        "SDN-9": "\"((pt = 1 . pt <- 3 + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 10 + pt = 6 . pt <- 7 + zero) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-9 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-10 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-11 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-13 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-9", 
+        "SDN-8": "\"((zero + pt = 12 . pt <- 14 + pt = 2 . pt <- 4 + pt = 8 . pt <- 9 + pt = 5 . pt <- 7 + pt = 11 . pt <- 13) . (((pt = 3 . pt <- 5) + (pt = 4 . pt <- 6) + (pt = 7 . pt <- 8) + (pt = 9 . pt <- 11) + (pt = 10 . pt <- 12) + (pt = 13 . pt <- 15) + (pt = 14 . pt <- 16)))) *\" ; SDN-8 o+ (upS4 ? \"pt = 11 . pt <- 13\") ; SDN-8 o+ (upS5 ? \"pt = 5 . pt <- 7\") ; SDN-8 o+ (upS6 ? \"pt = 8 . pt <- 9\") ; SDN-8 o+ (upS3 ? \"pt = 1 . pt <- 3\") ; SDN-16", 
+        "C2": "((upS2 ! \"zero\") ; ((syn ? \"one\") ; ((upS4 ! \"pt = 11 . pt <- 13\") ; ((upS6 ! \"pt = 8 . pt <- 9\") ; bot))))", 
+        "C1": "((upS1 ! \"zero\") ; ((syn ! \"one\") ; ((upS3 ! \"pt = 1 . pt <- 3\") ; ((upS5 ! \"pt = 5 . pt <- 7\") ; bot))))"
+    }, 
+    "program": "SDN-1 || C1 || C2", 
+    "channels": [
+        "upS1", 
+        "upS2", 
+        "upS3", 
+        "upS4", 
+        "upS5", 
+        "upS6", 
+        "syn"
+    ], 
+    "in_packets": {
+        "0": "(pt = 2)"
+    }, 
+    "out_packets": {
+        "0": "(pt = 15)"
+    }, 
+    "properties": {
+        "0": [
+            [
+                "r", 
+                "(head(@Program))", 
+                "=0", 
+                2
+            ], 
+            [
+                "r", 
+                "(head(tail(@Program, { rcfg(upS1, \"zero\") , rcfg(upS2, \"zero\") , rcfg(upS3, \"pt = 1 . pt <- 3\") , rcfg(upS4, \"pt = 11 . pt <- 13\") , rcfg(upS5, \"pt = 5 . pt <- 7\") , rcfg(upS6, \"pt = 8 . pt <- 9\") , rcfg(syn, \"one\") })))", 
+                "=0", 
+                3
+            ]
+        ]
+    }
+}
