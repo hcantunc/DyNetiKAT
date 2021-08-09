@@ -36,7 +36,7 @@ In the following we describe how the operators of NetKAT and DyNetKAT can be rep
 The NetKAT operators are encoded as follows:  
  - The predicate <img src="https://render.githubusercontent.com/render/math?math=0"> for dropping a packet is encoded as `zero`
  - The predicate <img src="https://render.githubusercontent.com/render/math?math=1"> which passes on a packet without any modification is encoded as `one` 
- - The predicate <img src="https://render.githubusercontent.com/render/math?math=f=n"> which checks if the field `arg1` of a packet has value `arg2` is is encoded as `arg1 = arg2`
+ - The predicate <img src="https://render.githubusercontent.com/render/math?math=arg1=arg2"> which checks if the field `arg1` of a packet has the value `arg2` is encoded as `arg1 = arg2`
  - The negation operator<img src="https://render.githubusercontent.com/render/math?math=\neg arg1"> is encoded as `~ arg1`
  - The modification operator <img src="https://render.githubusercontent.com/render/math?math=arg1 \leftarrow arg2"> which assigns the value `arg2` into the field `arg1` in the current packet is encoded as `arg1 <- arg2`
 - The union (and disjunction) operator <img src="https://render.githubusercontent.com/render/math?math=arg1"> + <img src="https://render.githubusercontent.com/render/math?math=arg2"> is encoded as `arg1 + arg2`
@@ -55,10 +55,10 @@ If the equivalence in (1) holds then this implies that the egress point is reach
 
 For a given DyNetKAT term `D` we first apply our equational reasoning framework to unfold the expression and rewrite it into the normal form. This is achieved by utilizing the projection operator <img src="https://render.githubusercontent.com/render/math?math=\pi_n(-)">. Note that the number of unfoldings (i.e. the value `n` inside the projection operator) is a fixed value specified by the user. We then apply the restriction operator <img src="https://render.githubusercontent.com/render/math?math=\delta_H(-)"> on the resulting expression and eliminate the terms of shape `X!Z` and `X?Z`. That is, we compute the term <img src="https://render.githubusercontent.com/render/math?math=\delta_H(\pi_n(D))"> where H is the set of all terms of shape `X!Z` and `X?Z` that appear in `D`. Then, we extract the desired configurations by using the head and tail operators. After this step, the resulting expression is a purely NetKAT term  and  we  utilize  the  NetKAT  decision  procedure  for  checking  the  desired properties.
 
-In our tool a property is defined as 4-tuple containing the following elements:
+In our tool a property is defined as a 4-tuple containing the following elements:
 
  1. The first element describes the type of property and can be either `r` or `w` where `r` denotes a reachability property and `w` denotes a waypointing property.
- 2. The second element is the property itself. The constructs that can be used to define a property are as follows: `head(@Program)`, `tail(@Program, R)`. Here, `@Program` is referring to DyNetKAT program that is given as input, and `R` is a set containing elements of shape `rcfg(X,N)`. 
+ 2. The second element is the property itself. The constructs that can be used to define a property are as follows: `head(@Program)`, `tail(@Program, R)`. Here, `@Program` is a special construct that refers to DyNetKAT program that is given as input, and `R` is a set containing elements of shape `rcfg(X,N)`. 
  3.  For reachability properties, the third element can be either `!0` or `=0` where `!0` denotes that the associated egress point should be reachable from the associated ingress point, whereas `=0` denotes that the associated egress should be unreachable from the associated ingress point. For waypointing properties, the third element is a predicate which denotes the waypoint.
  4. The fourth element denotes the maximum number of unfoldings to perform in the projection operator.
  
@@ -111,9 +111,9 @@ Note that the NetKAT terms inside the definitions must be enclosed with double q
     
   The above encoding defines a reachability property and a waypointing property for the `first_packet` and a reachability   property for the`second_packet`.     
 
-An example input file can be found in benchmarks/stateful_firewall.json.
+Sample input files can be found in under the folder `benchmarks`.
 
 
 ## FatTree Benchmarks
 
-The FatTree topologies and the associated properties that are described [here](https://arxiv.org/abs/2102.10035) can be generated using the script `generate_fattree.py` under the folder `benchmarks`. This script requires Python 2 and the package [NetworkX](https://networkx.org/).
+The FatTree topologies and the associated properties that are described [here](https://arxiv.org/abs/2102.10035) can be generated using the script `fattree.py` under the folder `benchmarks`. This script requires Python 2 and the package [NetworkX](https://networkx.org/).
