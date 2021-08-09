@@ -22,6 +22,8 @@ if __name__ == "__main__":
                       help="number of threads (Default: the number of available cores in the system)")
     parser.add_option("-p", "--preprocessed", dest="preprocessed", default=False, action="store_true",
                       help="pass this option if the given input file is already preprocessed")
+    parser.add_option("-v", "--netkat-version", dest="netkat_version", default="netkat-idd",
+                      help="the version of the netkat tool: netkat-idd or netkat-automata (Default: netkat-idd)")
     (options, args) = parser.parse_args()
 
     if len(args) < 3:
@@ -48,7 +50,7 @@ if __name__ == "__main__":
 
 
     # preprocessing step
-    preprocessor = Preprocessing(direct, maude_path, netkat_path, maude_preprocess_file,
+    preprocessor = Preprocessing(direct, maude_path, netkat_path, options.netkat_version, maude_preprocess_file,
                                  maude_dnk_file, options.preprocessed, options.num_threads)
     data = preprocessor.preprocess(data)
     if not options.preprocessed:
@@ -60,8 +62,8 @@ if __name__ == "__main__":
 
 
     # analysis step
-    decision_procedure = DyNetKAT(direct, maude_path, netkat_path, maude_preprocess_file,
-                                  maude_dnk_file, options.num_threads)
+    decision_procedure = DyNetKAT(direct, maude_path, netkat_path, options.netkat_version, 
+                                  maude_preprocess_file, maude_dnk_file, options.num_threads)
     result = decision_procedure.decide(data)
 
 
@@ -72,22 +74,10 @@ if __name__ == "__main__":
 
     # report the results
     for (packet, prop_num), v in result.items():
-        prop_type = data['properties'][str(packet)][prop_num][0]
-        prop_result = data['properties'][str(packet)][prop_num][2]
-
-        if v == None:
+        if v == "satisfied":
+            print("Packet: #{} - property: #{}: property satisfied.".format(packet, prop_num))
+        elif v == "violated":
+            print("Packet: #{} - property: #{}: property violated.".format(packet, prop_num))
+        elif v == "error":
             print("Packet: #{} - property: #{}: an error occurred while checking this property."
                   .format(packet, prop_num))
-        elif prop_type == "r":
-            #reachability property
-            if (v == "false" and prop_result == "!0") or (v == "true" and prop_result == "=0"):
-                print("Packet: #{} - property: #{}: property satisfied.".format(packet, prop_num))
-            else:
-                print("Packet: #{} - property: #{}: property violated.".format(packet, prop_num))
-        elif prop_type == "w":
-            #waypointing property
-            if v == "true":
-                print("Packet: #{} - property: #{}: property satisfied.".format(packet, prop_num))
-            else:
-                print("Packet: #{} - property: #{}: property violated.".format(packet, prop_num))
-    
