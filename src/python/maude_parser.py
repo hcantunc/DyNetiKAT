@@ -13,11 +13,13 @@ class MaudeComm:
 
 
     def comm(self, program, maude_input_file):
+        '''Generates a system command to run Maude on the given input file and executes it.'''
         cmd = ['{} {} {}'.format(self.maude_path, program, maude_input_file)]
         return execute_cmd(cmd, self.direct)
 
 
-    def process_solutions(self, output):
+    def process_output(self, output):
+        '''Parses the output obtained from Maude.'''
         try:
             split = re.search('result (.*?):', output).group(1)
             output = output.split('result {}:'.format(split), 1)[1]
@@ -29,11 +31,15 @@ class MaudeComm:
             return None
         
 
-    def parse(self, file_name, module, term):
+    def execute(self, file_name, module, term):
+        '''
+        Generates a Maude command to parse a given term, 
+        executes it and returns the parsed result.
+        '''
         terms = 'red in {} : {} .'.format(module, term)
         export_file(self.out_file, terms)
         output, error = self.comm(file_name, self.out_file)
-        output = self.process_solutions(output)
+        output = self.process_output(output)
 
         if os.path.exists(self.out_file):
             os.remove(self.out_file)
