@@ -33,8 +33,8 @@ def generate_distributed_independent_controllers():
 
     recursive_variables = merge_two_dicts(controllers, switch_rec_vars)
 
-    in_packets = {"0": "(pt = 2)"}
-    out_packets = {"0": "(pt = 15)"}
+    in_packets = {"H1_to_H4": "(pt = 2)", "H3_to_H2": "(pt = 1)"}
+    out_packets = {"H1_to_H4": "(pt = 15)", "H3_to_H2": "(pt = 16)"}
 
     all_rcfgs = []
     all_rcfgs.append('rcfg(upS1, "zero")')
@@ -44,8 +44,16 @@ def generate_distributed_independent_controllers():
     all_rcfgs.append('rcfg(upS5, "{}")'.format(flow_tables["S5"][0]))
     all_rcfgs.append('rcfg(upS6, "{}")'.format(flow_tables["S6"][0]))
 
-    properties = {"0": [("r", "(head(@Program))", "=0", 2),
-                        ("r", '(head(tail(@Program, {{ {} }})))'.format(' , '.join(all_rcfgs)), "=0", 3),]}
+    properties = {
+                  "H1_to_H4": [
+                               ("r", "(head(@Program))", "=0", 2),
+                               ("r", '(head(tail(@Program, {{ {} }})))'.format(' , '.join(all_rcfgs)), "=0", 3)
+                              ],
+                  "H3_to_H2": [
+                               ("r", "(head(@Program))", "=0", 2),
+                               ("r", '(head(tail(@Program, {{ {} }})))'.format(' , '.join(all_rcfgs)), "=0", 3)
+                              ]
+                 }
 
     data = OrderedDict()
     data['module_name'] = "DISTRIBUTED-INDEPENDENT-CONTROLLERS"
@@ -88,8 +96,8 @@ def generate_distributed_synchronized_controllers():
 
     recursive_variables = merge_two_dicts(controllers, switch_rec_vars)
 
-    in_packets = {"0": "(pt = 2)"}
-    out_packets = {"0": "(pt = 15)"}
+    in_packets = {"H1_to_H4": "(pt = 2)", "H3_to_H2": "(pt = 1)"}
+    out_packets = {"H1_to_H4": "(pt = 15)", "H3_to_H2": "(pt = 16)"}
 
     all_rcfgs = []
     all_rcfgs.append('rcfg(upS1, "zero")')
@@ -100,8 +108,16 @@ def generate_distributed_synchronized_controllers():
     all_rcfgs.append('rcfg(upS6, "{}")'.format(flow_tables["S6"][0]))
     all_rcfgs.append('rcfg(syn, "one")')
 
-    properties_synch = {"0": [("r", "(head(@Program))", "=0", 2),
-                              ("r", '(head(tail(@Program, {{ {} }})))'.format(' , '.join(all_rcfgs)), "=0", 4),]}
+    properties = {
+                  "H1_to_H4": [
+                               ("r", "(head(@Program))", "=0", 2),
+                               ("r", '(head(tail(@Program, {{ {} }})))'.format(' , '.join(all_rcfgs)), "=0", 3)
+                              ],
+                  "H3_to_H2": [
+                               ("r", "(head(@Program))", "=0", 2),
+                               ("r", '(head(tail(@Program, {{ {} }})))'.format(' , '.join(all_rcfgs)), "=0", 3)
+                              ]
+                 }
 
     data = OrderedDict()
     data['module_name'] = "DISTRIBUTED-CONTROLLER-SYNCHRONIZED"
@@ -110,7 +126,7 @@ def generate_distributed_synchronized_controllers():
     data['channels'] = channels
     data['in_packets'] = in_packets
     data['out_packets'] = out_packets
-    data['properties'] = properties_synch
+    data['properties'] = properties
 
     return data
 

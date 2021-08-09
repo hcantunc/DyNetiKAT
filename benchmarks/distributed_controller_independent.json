@@ -30,13 +30,29 @@
         "upS6"
     ], 
     "in_packets": {
-        "0": "(pt = 2)"
+        "H3_to_H2": "(pt = 1)", 
+        "H1_to_H4": "(pt = 2)"
     }, 
     "out_packets": {
-        "0": "(pt = 15)"
+        "H3_to_H2": "(pt = 16)", 
+        "H1_to_H4": "(pt = 15)"
     }, 
     "properties": {
-        "0": [
+        "H3_to_H2": [
+            [
+                "r", 
+                "(head(@Program))", 
+                "=0", 
+                2
+            ], 
+            [
+                "r", 
+                "(head(tail(@Program, { rcfg(upS1, \"zero\") , rcfg(upS2, \"zero\") , rcfg(upS3, \"pt = 1 . pt <- 3\") , rcfg(upS4, \"pt = 11 . pt <- 13\") , rcfg(upS5, \"pt = 5 . pt <- 7\") , rcfg(upS6, \"pt = 8 . pt <- 9\") })))", 
+                "=0", 
+                3
+            ]
+        ], 
+        "H1_to_H4": [
             [
                 "r", 
                 "(head(@Program))", 
