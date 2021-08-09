@@ -27,16 +27,13 @@ fmod DNA is
 	op _;_ : String DNA -> DNA [ctor metadata "sequential composition" prec 40 gather (E e)] .
 	op _;_ : Comm DNA -> DNA [ctor metadata "sequential composition" prec 40 gather (E e)] .
 	op _||_ : DNA DNA -> DNA [ctor comm metadata "parallel composition" prec 42 gather (E e)] .
-
 	op _|_ : DNA DNA -> DNA [ctor comm prec 42 gather (E e)] .
 	op _||<_ : DNA DNA -> DNA [ctor metadata "left merge" prec 42 gather (e E)] .
 
 	op bot : -> DNA .
 	op rcfg(_,_) : Channel String -> Comm .
-
 	op delta{_}(_) : TermSet DNA -> DNA . 
 	op pi{_}(_) : Nat DNA -> DNA .
-
 
 	var H : TermSet . 
 	var M : Nat .
