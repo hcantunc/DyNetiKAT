@@ -36,7 +36,7 @@ In the following we describe how the operators of NetKAT and DyNetKAT can be rep
 The NetKAT operators are encoded as follows:  
  - The predicate <img src="https://render.githubusercontent.com/render/math?math=0"> for dropping a packet is encoded as `zero`
  - The predicate <img src="https://render.githubusercontent.com/render/math?math=1"> which passes on a packet without any modification is encoded as `one` 
- - The predicate <img src="https://render.githubusercontent.com/render/math?math=arg1=arg2"> which checks if the field `arg1` of a packet has value `arg2` is is encoded as `arg1 = arg2`
+ - The predicate <img src="https://render.githubusercontent.com/render/math?math=arg1=arg2"> which checks if the field `arg1` of a packet has the value `arg2` is encoded as `arg1 = arg2`
  - The negation operator<img src="https://render.githubusercontent.com/render/math?math=\neg arg1"> is encoded as `~ arg1`
  - The modification operator <img src="https://render.githubusercontent.com/render/math?math=arg1 \leftarrow arg2"> which assigns the value `arg2` into the field `arg1` in the current packet is encoded as `arg1 <- arg2`
 - The union (and disjunction) operator <img src="https://render.githubusercontent.com/render/math?math=arg1"> + <img src="https://render.githubusercontent.com/render/math?math=arg2"> is encoded as `arg1 + arg2`
