@@ -28,7 +28,7 @@ In the following we describe how the operators of NetKAT and DyNetKAT can be rep
  -  The communication terms sending <img src="https://render.githubusercontent.com/render/math?math=arg1 ! arg2"> and receiving <img src="https://render.githubusercontent.com/render/math?math=arg1 ? arg2"> are encoded as `arg1 ! arg2` and `arg1 ? arg2`. Here, `arg1` is a channel name and `arg2` is a NetKAT policy.
  - The parallel composition of DyNetKAT policies <img src="https://render.githubusercontent.com/render/math?math=arg1 \parallel arg2"> is encoded as `arg1 || arg2`.  
  - Non-deterministic choice of DyNetKAT policies <img src="https://render.githubusercontent.com/render/math?math=arg1 \oplus arg2"> is encoded as `arg1 o+ arg2`
- - The constant <img src="https://render.githubusercontent.com/render/math?math=\mathbf{rcfg}_{arg1, arg2}"> that pinpoints a communication step is encoded as `rcfg(arg1, arg2)`. Here, `arg1` is a channel name and `arg2` is a NetKAT policy.
+ - The constant <img src="https://render.githubusercontent.com/render/math?math=\mathbf{rcfg}_{arg1, arg2}"> which pinpoints a communication step is encoded as `rcfg(arg1, arg2)`. Here, `arg1` is a channel name and `arg2` is a NetKAT policy.
  - Recursive variables are explicitly defined in the file that is given as input to the tool. 
 
 <br />
@@ -111,7 +111,7 @@ Note that the NetKAT terms inside the definitions must be enclosed with double q
     
   The above encoding defines a reachability property and a waypointing property for the `first_packet` and a reachability   property for the`second_packet`.     
 
-Sample input files can be found in under the folder `benchmarks`.
+Sample input files can be found under the folder `benchmarks`.
 
 
 ## FatTree Benchmarks
