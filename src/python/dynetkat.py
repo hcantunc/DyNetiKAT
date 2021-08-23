@@ -89,8 +89,8 @@ class DyNetKAT:
     def report_results(self, result, data):
         '''
         Takes the result of the property checking step and information about the properties 
-        and returns a dictionary where properties are classified as 'satisfied', 
-        'violated' or 'error'. 
+        and returns a dictionary where properties are classified as 'satisfied', 'violated' 
+        or 'error'. 
         '''
         report = {}
         for (packet, prop_num), v in result.items():
@@ -120,8 +120,8 @@ class DyNetKAT:
         that are being considered for this network and checks whether the given properties are 
         satisfied in the network. 
 
-        For a given property the returned result can be one of the following: 'satisfied', 'violated' 
-        or 'error'. 
+        For a given property the returned result can be one of the following: 'satisfied', 
+        'violated' or 'error'. 
         '''
         delta_h = self.compute_encapsulation_set(data["comm"])
 
