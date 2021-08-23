@@ -1,5 +1,6 @@
 
 
+
 ## DyNetiKAT
 
 This is a network verification tool based on the [DyNetKAT](https://arxiv.org/abs/2102.10035) language which provides a reasoning method on reachability and waypointing properties for dynamic networks. DyNetiKAT utilizes [Maude](https://www.sciencedirect.com/science/article/pii/S0304397501003590) rewriting system and [NetKAT](https://dl.acm.org/doi/10.1145/2578855.2535862) decision procedure in the background.
@@ -11,15 +12,26 @@ This is a network verification tool based on the [DyNetKAT](https://arxiv.org/ab
 
 [Maude (>= 3.0)](http://maude.cs.illinois.edu/w/index.php/All_Maude_3_versions)
 
-[NetKAT tool](https://github.com/netkat-lang/netkat)
+NetKAT tool ([netkat-idd](https://github.com/netkat-lang/netkat) or [netkat-automata](https://github.com/frenetic-lang/netkat-automata))
 
   
 
 ## Usage
 
-python dnk.py <path_to_maude_executable>  <path_to_netkat_tool_build_dir/install/default/bin/katbv>  <input_file>
+    python dnk.py <path_to_maude> <path_to_netkat_tool> <input_file>
 
-  
+    Options:
+      -h, --help            show this help message and exit
+      -t NUM_THREADS, --threads=NUM_THREADS
+                            number of threads (Default: the number of available cores in the system)
+      -p, --preprocessed    pass this option if the given input file is already preprocessed
+      -v NETKAT_VERSION, --netkat-version=NETKAT_VERSION
+                            the version of the netkat tool: netkat-idd or netkat-automata (Default: netkat-idd)
+
+For `netkat-idd` tool, the path should be as follows: `path_to_netkat_idd_build_dir/install/default/bin/katbv`. <br>
+For `netkat-automata` tool, the path should be as follows: `path_to_netkat_automata_build_dir/src/Decide_Repl.native`.
+
+
 ## Encoding 
 
 In the following we describe how the operators of NetKAT and DyNetKAT can be represented in in the tool. DyNetKAT operators are encoded as follows:   
@@ -117,3 +129,9 @@ Sample input files can be found under the folder `benchmarks`.
 ## FatTree Benchmarks
 
 The FatTree topologies and the associated properties that are described [here](https://arxiv.org/abs/2102.10035) can be generated using the script `fattree.py` under the folder `benchmarks`. This script requires Python 2 and the package [NetworkX](https://networkx.org/).
+
+
+
+## Known Issues
+
+We observed that in certain cases the `netkat-idd` tool raises the following error: `(Invalid_argument "union: not right-associative!")`. You may want to use the `netkat-automata` tool in these cases.
