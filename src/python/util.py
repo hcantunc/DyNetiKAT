@@ -24,7 +24,7 @@ def generate_error_message(tool_name, term_name, term, error, terminate_exec=Fal
 
 def generate_outfile(direct, name):
     '''Generates an output file with respect to the given path and name.'''
-    return direct + '/output_{}.txt'.format(name)
+    return os.path.join(direct, 'output_{}.txt'.format(name))
 
 
 def export_file(filename, contents):
@@ -38,7 +38,6 @@ def execute_cmd(cmd, direct):
     proc = subprocess.run(cmd, stdin=subprocess.PIPE,
                           stdout=subprocess.PIPE,
                           stderr=subprocess.PIPE,
-                          shell=True,
-                          cwd=direct)
+                          shell=True)
 
     return proc.stdout.decode('utf-8'), proc.stderr.decode('utf-8')

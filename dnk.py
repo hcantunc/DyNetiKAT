@@ -9,9 +9,9 @@ from src.python.util import is_exe, is_json
 
 
 direct = os.path.dirname(os.path.realpath(__file__))
-output_folder = direct + '/output'
-maude_preprocess_file = direct + '/src/maude/preprocess.maude'
-maude_dnk_file = direct + '/src/maude/dnk.maude'
+output_folder = os.path.join(direct, 'output')
+maude_preprocess_file = os.path.join(direct, 'src/maude/preprocess.maude')
+maude_dnk_file = os.path.join(direct, 'src/maude/dnk.maude')
 maude_path = ''
 netkat_path = ''
 
@@ -68,8 +68,8 @@ if __name__ == "__main__":
 
 
     # clean up
-    if os.path.exists(data['file_name']):
-        os.remove(data['file_name'])
+    if os.path.exists(os.path.join(direct, data['file_name'])):
+        os.remove(os.path.join(direct, data['file_name']))
 
 
     # report the results

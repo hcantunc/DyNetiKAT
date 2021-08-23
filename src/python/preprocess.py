@@ -1,3 +1,4 @@
+import os
 import re
 import threading
 from multiprocessing import Pool
@@ -81,8 +82,9 @@ class Preprocessing:
 
             # if the policies are not already normalized we need to check if any of the NetKAT policies are
             # equal to 0. If some NetKAT term is equal to 0 then what follows after that term is insignificant
-            self.generate_maude_file(data['file_name'], data['module_name'], self.maude_preprocess_file,
-                                     data['recursive_variables'], data['channels'], False)
+            self.generate_maude_file(os.path.join(self.direct, data['file_name']), data['module_name'],
+                                     self.maude_preprocess_file, data['recursive_variables'],
+                                     data['channels'], False)
 
             parsed_terms = {}
             netkat_terms = {}
@@ -97,7 +99,8 @@ class Preprocessing:
             data["comm"] = set()
             for k, v in data['recursive_variables'].items():
                 # parse with maude and extract netkat terms and communication terms
-                parsed_terms[k], error = maude_parser.execute(data['file_name'], data['module_name'], v)
+                parsed_terms[k], error = maude_parser.execute(os.path.join(self.direct, data['file_name']),
+                                                              data['module_name'], v)
 
                 if parsed_terms[k] is None:
                     generate_error_message("Maude", k, v, error, True)
