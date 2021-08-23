@@ -29,7 +29,7 @@ This is a network verification tool based on the [DyNetKAT](https://arxiv.org/ab
                             the version of the netkat tool: netkat-idd or netkat-automata (Default: netkat-idd)
 
 For `netkat-idd` tool, the path should be as follows: `path_to_netkat_idd_build_dir/install/default/bin/katbv`. <br>
-For `netkat-automata` tool, the path should be as follows: `path_to_netkat_automata_build_dir/src/Decide_Repl.native`
+For `netkat-automata` tool, the path should be as follows: `path_to_netkat_automata_build_dir/src/Decide_Repl.native`.
 
 
 ## Encoding 
