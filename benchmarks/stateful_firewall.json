@@ -1,11 +1,11 @@
 {
     "in_packets": {
-        "0": "(pt = 1)", 
-        "1": "(pt = 2)"
+        "int_to_ext": "(pt = 1)", 
+        "ext_to_int": "(pt = 2)"
     }, 
     "out_packets": {
-        "0": "(pt = 2)", 
-        "1": "(pt = 1)"
+        "int_to_ext": "(pt = 2)", 
+        "ext_to_int": "(pt = 1)"
     },
     "module_name": "STATEFUL-FIREWALL", 
     "recursive_variables": {
@@ -16,7 +16,7 @@
     "channels": ["secConReq", "secConEnd"], 
     "program": "Host || Switch", 
     "properties": {
-        "0": [
+        "int_to_ext": [
             [
                 "r",
                 "head(@Program)", 
@@ -30,7 +30,7 @@
                 2
             ]
         ],
-        "1": [
+        "ext_to_int": [
             [
                 "r",
                 "head(@Program)", 
