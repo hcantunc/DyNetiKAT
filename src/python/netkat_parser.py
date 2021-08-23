@@ -14,8 +14,14 @@ class NetKATComm:
         self.out_file = out_file
 
 
-    def comm(self, file1, file2):
-        '''Generates a system command to run the NetKAT tool on the given input files and executes it.'''
+    def comm_automata(self, file1):
+        '''Generates a system command to run the netkat-automata tool on the given input file and executes it.'''
+        cmd = ['{} {}'.format(self.netkat_path, file1)]
+        return execute_cmd(cmd, self.direct)
+
+
+    def comm_idd(self, file1, file2):
+        '''Generates a system command to run the netkat-idd tool on the given input files and executes it.'''
         cmd = ['{} equiv {} {}'.format(self.netkat_path, file1, file2)]
         return execute_cmd(cmd, self.direct)
 
@@ -54,23 +60,36 @@ class NetKATComm:
 
     def execute(self, term1, term2):
         '''
-        Generates two files with NetKAT expressions, passes them to 
+        Generates files with NetKAT expressions, passes them to 
         the NetKAT tool, parses the obtained result and returns it.
         '''
-        outfile_1 = '{}_1.text'.format(self.out_file.split('.')[0])
-        outfile_2 = '{}_2.text'.format(self.out_file.split('.')[0])
+        if self.netkat_version == "netkat-idd":
+            outfile_1 = '{}_1.txt'.format(self.out_file.split('.')[0])
+            outfile_2 = '{}_2.txt'.format(self.out_file.split('.')[0])
 
-        term1, term2 = self.tool_format(term1, term2)
+            term1, term2 = self.tool_format(term1, term2)
 
-        export_file(outfile_1, term1)
-        export_file(outfile_2, term2)
+            export_file(outfile_1, term1)
+            export_file(outfile_2, term2)
 
-        output, error = self.comm(outfile_1, outfile_2)
-        output = self.process_output(output)
+            output, error = self.comm_idd(outfile_1, outfile_2)
+            output = self.process_output(output)
 
-        if os.path.exists(outfile_1):
-            os.remove(outfile_1)
-        if os.path.exists(outfile_2):
-            os.remove(outfile_2)
+            if os.path.exists(outfile_1):
+                os.remove(outfile_1)
+            if os.path.exists(outfile_2):
+                os.remove(outfile_2)
+        elif self.netkat_version == "netkat-automata":
+            outfile = '{}.txt'.format(self.out_file.split('.')[0])
+
+            term1, term2 = self.tool_format(term1, term2)
+
+            export_file(outfile, "({}) == ({})".format(term1, term2))
+
+            output, error = self.comm_automata(outfile)
+            output = self.process_output(output)
+
+            if os.path.exists(outfile):
+                os.remove(outfile)
 
         return output, error
