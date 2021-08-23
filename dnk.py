@@ -31,7 +31,7 @@ if __name__ == "__main__":
         sys.exit()
 
     if not os.path.exists(args[0]) or not is_exe(args[0]):
-        print("Maude could not be found in the given path!")
+        print("Please provide the path to the Maude executable!")
         sys.exit()
 
     if not os.path.exists(args[1]) or not is_exe(args[1]):
