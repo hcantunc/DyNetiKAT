@@ -124,6 +124,7 @@ class Preprocessing:
                 if v.get() == 'true':
                     data['recursive_variables'][k] = data['recursive_variables'][k].replace(netkat_terms[k][i], 'zero')
 
-        self.generate_maude_file(data['file_name'], data['module_name'], self.maude_dnk_file, data['recursive_variables'], data['channels'], True)
+        self.generate_maude_file(os.path.join(self.direct, data['file_name']), data['module_name'], 
+                                 self.maude_dnk_file, data['recursive_variables'], data['channels'], True)
 
         return data

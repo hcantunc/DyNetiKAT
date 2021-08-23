@@ -1,3 +1,4 @@
+import os
 from multiprocessing import Pool
 from src.python.maude_parser import MaudeComm
 from src.python.netkat_parser import NetKATComm
@@ -59,7 +60,7 @@ class DyNetKAT:
 
         maude_parser = MaudeComm(self.direct, self.maude_path, 
                                  generate_outfile(self.direct, "maude_" + str(q) + "_" + str(counter)))
-        prop, error = maude_parser.execute(data['file_name'], data['module_name'], prop_maude)
+        prop, error = maude_parser.execute(os.path.join(self.direct, data['file_name']), data['module_name'], prop_maude)
 
         if prop is None:
             generate_error_message("Maude", "packet: {}, property: {}".format(q, counter), prop_maude, error, False)
