@@ -21,7 +21,7 @@ def generate_fattree_topology(pods):
     print("num_hosts: {}".format(num_hosts))
     print("num_agg_switches: {}".format(num_agg_switches))
     print("num_core_switches: {}".format(num_core_switches))
-    print("total_num_switches: {}".format(num_hosts+num_agg_switches+num_core_switches))
+    print("total_num_switches: {}\n".format(num_hosts+num_agg_switches+num_core_switches))
 
     hosts = ['h' + str(i) for i in range(1, num_hosts + 1)]
     core_switches = ['s' + str(i) for i in range(1, num_core_switches + 1)]
@@ -304,7 +304,8 @@ def generate_fat_tree(pods):
 
 if __name__ == "__main__":
     for num_pods in [6, 8, 10, 12, 14, 16]:
+        print("number of pods: {}".format(num_pods))
         recursive_variables = generate_fat_tree(num_pods)
 
-        with open("out_{}_prop.json".format(num_pods), 'w') as f:
+        with open("fattree_{}_pods_{}.json".format(num_pods), 'w') as f:
             json.dump(recursive_variables, f, ensure_ascii=False, indent=4)
