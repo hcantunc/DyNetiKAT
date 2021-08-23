@@ -12,7 +12,7 @@ This is a network verification tool based on the [DyNetKAT](https://arxiv.org/ab
 
 [Maude (>= 3.0)](http://maude.cs.illinois.edu/w/index.php/All_Maude_3_versions)
 
-[netkat-idd tool](https://github.com/netkat-lang/netkat) or [netkat-automata tool](https://github.com/frenetic-lang/netkat-automata)
+NetKAT tool ([netkat-idd](https://github.com/netkat-lang/netkat) or [netkat-automata](https://github.com/frenetic-lang/netkat-automata))
 
   
 
