@@ -75,9 +75,9 @@ if __name__ == "__main__":
     # report the results
     for (packet, prop_num), v in result.items():
         if v == "satisfied":
-            print("Packet: #{} - property: #{}: property satisfied.".format(packet, prop_num))
+            print("Packet: {} - property: {}: property satisfied.".format(packet, prop_num))
         elif v == "violated":
-            print("Packet: #{} - property: #{}: property violated.".format(packet, prop_num))
+            print("Packet: {} - property: {}: property violated.".format(packet, prop_num))
         elif v == "error":
-            print("Packet: #{} - property: #{}: an error occurred while checking this property."
+            print("Packet: {} - property: {}: an error occurred while checking this property."
                   .format(packet, prop_num))
