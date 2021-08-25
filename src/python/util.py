@@ -15,7 +15,10 @@ def is_exe(fpath):
 
 
 def generate_error_message(tool_name, term_name, term, error, terminate_exec=False):
-    '''Generates an error message with respect to the given arguments.'''
+    '''
+    Generates and prints an error message with respect to the given arguments and possibly
+    terminates the execution.
+    '''
     print("\n{} could not parse the following term:\n{} --> {}\nError message:\n{}".format(tool_name, term_name, term, error))
     if terminate_exec:
         print("\nTerminating the procedure.")
