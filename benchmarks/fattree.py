@@ -307,5 +307,5 @@ if __name__ == "__main__":
         print("number of pods: {}".format(num_pods))
         recursive_variables = generate_fat_tree(num_pods)
 
-        with open("fattree_{}_pods_{}.json".format(num_pods), 'w') as f:
+        with open("fattree_{}_pods.json".format(num_pods), 'w') as f:
             json.dump(recursive_variables, f, ensure_ascii=False, indent=4)
