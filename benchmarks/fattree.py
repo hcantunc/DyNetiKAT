@@ -14,9 +14,9 @@ from util import calculate_recursive_variables
 
 
 def generate_fattree_topology(pods):
-    num_hosts = (pods ** 3)/4
+    num_hosts = (pods ** 3)//4
     num_agg_switches = pods * pods
-    num_core_switches = (pods * pods)/4
+    num_core_switches = (pods * pods)//4
 
     print("num_hosts: {}".format(num_hosts))
     print("num_agg_switches: {}".format(num_agg_switches))
@@ -35,25 +35,25 @@ def generate_fattree_topology(pods):
     host_offset = 0
     for pod in range(pods):
         core_offset = 0
-        for sw in range(pods/2):
+        for sw in range(pods//2):
             switch = agg_switches[(pod*pods) + sw]
             # Connect to core switches
-            for port in range(pods/2):
+            for port in range(pods//2):
                 core_switch = core_switches[core_offset]
                 g.add_edge(switch, core_switch)
                 g.add_edge(core_switch, switch)
                 core_offset += 1
 
             # Connect to aggregate switches in same pod
-            for port in range(pods/2, pods):
+            for port in range(pods//2, pods):
                 lower_switch = agg_switches[(pod*pods) + port]
                 g.add_edge(switch, lower_switch)
                 g.add_edge(lower_switch, switch)
 
-        for sw in range(pods/2, pods):
+        for sw in range(pods//2, pods):
             switch = agg_switches[(pod*pods) + sw]
             # Connect to hosts
-            for port in range(pods/2, pods): # First k/2 pods connect to upper layer
+            for port in range(pods//2, pods): # First k/2 pods connect to upper layer
                 host = hosts[host_offset]
                 g.add_edge(switch, host)
                 g.add_edge(host, switch)
@@ -116,7 +116,7 @@ def generate_policy(nodes, g, dst_map, port_map, shortest_paths):
                 per_sw[nsrc] = tmp
 
     policy_term = {}
-    for i, (sw, pol) in enumerate(per_sw.iteritems()):
+    for i, (sw, pol) in enumerate(per_sw.items()):
         policy_term[sw] = '((sw = {}) . ({}))'.format(dst_map[sw], pol.rstrip()[:-1].rstrip())
 
     return policy_term
@@ -152,7 +152,7 @@ def construct_fattree(pods):
 
         # build policy based on destination-based shortest path routing
         prop_src = "h1"
-        prop_dst = "h" + str((pods ** 3)/4)
+        prop_dst = "h" + str((pods ** 3)//4)
         prop_path = nx.shortest_path(g, prop_src, prop_dst)
         shortest_paths = {}
 
@@ -172,7 +172,7 @@ def construct_fattree(pods):
             else:
                 per_sw[x] = tmp
 
-        for sw, pol in per_sw.iteritems():
+        for sw, pol in per_sw.items():
             topology_term += "sw = " + str(dst_map[sw]) + " . ("
             topology_term += pol.rstrip()[:-1].rstrip()
             topology_term += ") + "
