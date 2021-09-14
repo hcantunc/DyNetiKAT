@@ -128,7 +128,7 @@ Sample input files can be found under the folder `benchmarks`.
 
 ## FatTree Benchmarks
 
-The FatTree topologies and the associated properties that are described [here](https://arxiv.org/abs/2102.10035) can be generated using the script `fattree.py` under the folder `benchmarks`. This script requires Python 2 and the package [NetworkX](https://networkx.org/).
+The FatTree topologies and the associated properties that are described [here](https://arxiv.org/abs/2102.10035) (Section 5) can be generated using the script `fattree.py` under the folder `benchmarks`. This script requires Python 3 and the package [NetworkX](https://networkx.org/).
 
 
 
