@@ -1,6 +1,10 @@
 
 
 
+[![DOI](https://zenodo.org/badge/338371401.svg)](https://zenodo.org/badge/latestdoi/338371401)
+
+
+
 ## DyNetiKAT
 
 This is a network verification tool based on the [DyNetKAT](https://arxiv.org/abs/2102.10035) language which provides a reasoning method on reachability and waypointing properties for dynamic networks. DyNetiKAT utilizes [Maude](https://www.sciencedirect.com/science/article/pii/S0304397501003590) rewriting system and [NetKAT](https://dl.acm.org/doi/10.1145/2578855.2535862) decision procedure in the background.
