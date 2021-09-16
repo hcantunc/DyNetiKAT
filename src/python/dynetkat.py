@@ -1,4 +1,5 @@
 import os
+from time import perf_counter
 from multiprocessing import Pool
 from src.python.maude_parser import MaudeComm
 from src.python.netkat_parser import NetKATComm
@@ -70,12 +71,18 @@ class DyNetKAT:
                                        generate_outfile(self.direct, "netkat_" + str(q) + "_" + str(counter)))
             if prop_type == "r":
                 term1 = self.hbh_reachability_term(data['in_packets'][q], prop, data['out_packets'][q])
+
+                netkat_start = perf_counter()
                 result, error = netkat_parser.execute(term1, "zero")
+                netkat_end = perf_counter()
             elif prop_type == "w":
                 term1 = self.hbh_reachability_term(data['in_packets'][q], prop, data['out_packets'][q]) + " + " +\
                         self.waypointing_term(data['in_packets'][q], prop, data['out_packets'][q], rr_or_wp)
                 term2 = self.waypointing_term(data['in_packets'][q], prop, data['out_packets'][q], rr_or_wp)
+
+                netkat_start = perf_counter()
                 result, error = netkat_parser.execute(term1, term2)
+                netkat_end = perf_counter()
 
             if result is None:
                 generate_error_message("NetKAT tool", "packet: {}, property: {}".format(q, counter), term1, error, False)
@@ -84,7 +91,7 @@ class DyNetKAT:
         if error_occurred:
             return None
 
-        return result
+        return (result, netkat_end-netkat_start)
 
 
     def report_results(self, result, data):
@@ -94,24 +101,24 @@ class DyNetKAT:
         or 'error'. 
         '''
         report = {}
-        for (packet, prop_num), v in result.items():
+        for (packet, prop_num), (v, netkat_time) in result.items():
             prop_type = data['properties'][str(packet)][prop_num][0]
             prop_result = data['properties'][str(packet)][prop_num][2]
 
             if v is None:
-                report[(packet, prop_num)] = "error"
+                report[(packet, prop_num)] = ("error", netkat_time)
             elif prop_type == "r":
                 #reachability property
                 if (v == "false" and prop_result == "!0") or (v == "true" and prop_result == "=0"):
-                    report[(packet, prop_num)] = "satisfied"
+                    report[(packet, prop_num)] = ("satisfied", netkat_time)
                 else:
-                    report[(packet, prop_num)] = "violated"
+                    report[(packet, prop_num)] = ("violated", netkat_time)
             elif prop_type == "w":
                 #waypointing property
                 if v == "true":
-                    report[(packet, prop_num)] = "satisfied"
+                    report[(packet, prop_num)] = ("satisfied", netkat_time)
                 else:
-                    report[(packet, prop_num)] = "violated"
+                    report[(packet, prop_num)] = ("violated", netkat_time)
         return report
 
 
