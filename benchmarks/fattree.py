@@ -1,4 +1,3 @@
-#!/usr/bin/env python2
 """
 Parts of this file contain modified codes originally taken from
 https://github.com/rabeckett/Temporal-NetKAT/blob/master/scripts/pldi-experiments.py and
