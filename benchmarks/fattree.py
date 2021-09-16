@@ -307,5 +307,20 @@ if __name__ == "__main__":
         print("number of pods: {}".format(num_pods))
         recursive_variables = generate_fat_tree(num_pods)
 
-        with open("fattree_{}_pods.json".format(num_pods), 'w') as f:
+        all_properties = recursive_variables['properties'].copy()
+        
+        recursive_variables['properties'] = {'0': all_properties['0']}
+        with open("fattree_{}_pods_reachability_1.json".format(num_pods), 'w') as f:
             json.dump(recursive_variables, f, ensure_ascii=False, indent=4)
+
+        recursive_variables['properties'] = {'1': all_properties['1']}
+        with open("fattree_{}_pods_reachability_2.json".format(num_pods), 'w') as f:
+            json.dump(recursive_variables, f, ensure_ascii=False, indent=4)
+
+        recursive_variables['properties'] = {'2': all_properties['2']}
+        with open("fattree_{}_pods_waypointing.json".format(num_pods), 'w') as f:
+            json.dump(recursive_variables, f, ensure_ascii=False, indent=4)
+
+        recursive_variables['properties'] = all_properties
+        with open("fattree_{}_pods_all_properties.json".format(num_pods), 'w') as f:
+            json.dump(recursive_variables, f, ensure_ascii=False, indent=4
