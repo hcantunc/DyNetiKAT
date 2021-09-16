@@ -2,6 +2,7 @@ import optparse
 import os
 import sys
 import json
+from time import perf_counter
 from src.python.preprocess import Preprocessing
 from src.python.dynetkat import DyNetKAT
 from src.python.util import is_exe, is_json
@@ -17,6 +18,8 @@ netkat_path = ''
 
 
 if __name__ == "__main__":
+    program_start = perf_counter()
+    
     parser = optparse.OptionParser()
     parser.add_option("-t", "--threads", type="int", dest="num_threads",
                       help="number of threads (Default: the number of available cores in the system)")
@@ -24,6 +27,8 @@ if __name__ == "__main__":
                       help="pass this option if the given input file is already preprocessed")
     parser.add_option("-v", "--netkat-version", dest="netkat_version", default="netkat-idd",
                       help="the version of the netkat tool: netkat-idd or netkat-automata (Default: netkat-idd)")
+    parser.add_option("-s", "--time-stats", dest="time_stats", default=False, action="store_true",
+                      help="reports the timing information.")
     (options, args) = parser.parse_args()
 
     if len(args) < 3:
@@ -50,6 +55,7 @@ if __name__ == "__main__":
 
 
     # preprocessing step
+    preprocessing_start = perf_counter()
     preprocessor = Preprocessing(direct, maude_path, netkat_path, options.netkat_version, maude_preprocess_file,
                                  maude_dnk_file, options.preprocessed, options.num_threads)
     data = preprocessor.preprocess(data)
@@ -59,6 +65,7 @@ if __name__ == "__main__":
         with open(os.path.join(output_folder, data["module_name"] + "_preprocessed.json"), 'w') as f:
             data['comm'] = list(data['comm']) #set is not json serializable
             json.dump(data, f, ensure_ascii=False, indent=4)
+    preprocessing_stop = perf_counter() 
 
 
     # analysis step
@@ -73,7 +80,8 @@ if __name__ == "__main__":
 
 
     # report the results
-    for (packet, prop_num), v in result.items():
+    max_netkat_time = 0
+    for (packet, prop_num), (v, netkat_time), in result.items():
         if v == "satisfied":
             print("Packet: {} - property: #{}: property satisfied.".format(packet, prop_num))
         elif v == "violated":
@@ -81,3 +89,13 @@ if __name__ == "__main__":
         elif v == "error":
             print("Packet: {} - property: #{}: an error occurred while checking this property."
                   .format(packet, prop_num))
+        if netkat_time > max_netkat_time:
+            max_netkat_time = netkat_time
+                  
+                  
+    # report timing
+    if options.time_stats:
+        program_stop = perf_counter()
+        print("Total time: {:.2f} seconds".format(program_stop-program_start))
+        print("Preprocessing time: {:.2f} seconds".format(preprocessing_stop-preprocessing_start))
+        print("NetKAT time: {:.2f} seconds".format(max_netkat_time))
