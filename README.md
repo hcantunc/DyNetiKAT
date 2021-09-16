@@ -27,7 +27,8 @@ NetKAT tool ([netkat-idd](https://github.com/netkat-lang/netkat) or [netkat-auto
       -p, --preprocessed    pass this option if the given input file is already preprocessed
       -v NETKAT_VERSION, --netkat-version=NETKAT_VERSION
                             the version of the netkat tool: netkat-idd or netkat-automata (Default: netkat-idd)
-
+      -s --time-stats       reports the timing information.
+                      
 For `netkat-idd` tool, the path should be as follows: `path_to_netkat_idd_build_dir/install/default/bin/katbv`. <br>
 For `netkat-automata` tool, the path should be as follows: `path_to_netkat_automata_build_dir/src/Decide_Repl.native`.
 
