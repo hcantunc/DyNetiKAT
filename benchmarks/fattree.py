@@ -322,4 +322,4 @@ if __name__ == "__main__":
 
         recursive_variables['properties'] = all_properties
         with open("fattree_{}_pods_all_properties.json".format(num_pods), 'w') as f:
-            json.dump(recursive_variables, f, ensure_ascii=False, indent=4
+            json.dump(recursive_variables, f, ensure_ascii=False, indent=4)
