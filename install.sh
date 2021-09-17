@@ -1,11 +1,7 @@
 #install all the dependencies
 sudo apt-get update
 sudo apt install libncurses5 opam git python3-pip --assume-yes
-
-#download DyNetiKAT
 pip3 install numpy networkx
-git clone https://github.com/hcantunc/DyNetiKAT
-cd DyNetiKAT
 
 #install NetKAT tool
 git clone https://github.com/netkat-lang/netkat/
